@@ -1,2 +1,2 @@
 # Website-Kalender
-Repository website kalender
+Repository project website barbershop
