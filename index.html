@@ -1,14 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Barbershop</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HairLight Barbershop</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body bgcolor="black">
-    
-<h1>Website Barbershop</h1>
-    
+<body class="bg-black text-white font-sans">
+  <!-- Top Bar -->
+  <div class="bg-gray-900 text-sm py-2 px-4 flex justify-between items-center">
+    <div>ALWAYS OPEN &nbsp; | &nbsp; 7 DAYS A WEEK</div>
+    <div class="flex space-x-6">
+      <span>UNIVERSITAS MUHAMMADIYAH SEMARANG</span>
+      <span>082100045510</span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="bg-black px-4 py-4 flex justify-between items-center border-b border-gray-700">
+    <div class="text-3xl font-bold tracking-wider text-yellow-400">Barber <span class="text-white">Shop</span></div>
+    <ul class="flex space-x-6 text-sm uppercase font-semibold">
+      <li><a href="#" class="hover:text-yellow-400">Home</a></li>
+      <li><a href="#" class="hover:text-yellow-400">Services</a></li>
+      <li><a href="#" class="hover:text-yellow-400">Booking</a></li>
+      <li><a href="#" class="hover:text-yellow-400">About</a></li>
+      <li><a href="#" class="hover:text-yellow-400">Our Team</a></li>
+      <li><a href="#" class="hover:text-yellow-400">Contact</a></li>
+      <li><a href="#" class="hover:text-yellow-400">Gallery</a></li>
+      <li><a href="#" class="hover:text-yellow-400">Blog</a></li>
+    </ul>
+    <div class="flex items-center space-x-4">
+      <a href="#cart" class="text-xl text-white hover:text-yellow-400">
+        <i class="fas fa-shopping-cart"></i>
+      </a>
+      <a href="#login" class="text-sm hover:text-yellow-400">Login</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative h-screen flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1603415526960-f7e0328f6ed7?fit=crop&w=1600&q=80');">
+    <div class="bg-black bg-opacity-60 w-full h-full absolute top-0 left-0"></div>
+    <div class="relative z-10 max-w-6xl mx-auto px-6 flex items-center">
+      <div class="w-1/2">
+        <h1 class="text-5xl font-extrabold text-white mb-4">HAIRLIGHT</h1>
+        <p class="text-gray-300 mb-6">Expert Haircuts and Grooming Services</p>
+        <p class="text-sm text-gray-400 mb-8">
+          At The Finest Barbershop, we offer a wide range of professional hair cutting and grooming services for modern men.
+          Our experienced barbers use the latest techniques and tools to give you the perfect look.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#" class="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 font-bold rounded">BOOK A HAIRCUT</a>
+          <a href="#" class="border border-yellow-500 text-yellow-500 px-4 py-2 font-bold rounded hover:bg-yellow-500 hover:text-black">START SHOPPING</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+    </div>
+  </section>
 </body>
 </html>
