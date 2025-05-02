@@ -5,29 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | HairLight Barbershop</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .error-message {
+      color: #ef4444;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .input-error {
+      border-color: #ef4444 !important;
+    }
+  </style>
 </head>
 <body class="bg-black text-white font-sans">
   <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8 bg-gray-900 p-8 rounded-lg shadow-lg">
-      <div>
+      <div class="text-center">
+        <img src="/images/logo.svg" alt="Logo HairLight" class="mx-auto h-50 w-40">
         <h2 class="mt-6 text-center text-3xl font-extrabold text-yellow-400">Login</h2>
         <p class="mt-2 text-center text-sm text-gray-400">
           Masukkan email dan password yang sudah terdaftar
         </p>
       </div>
-      <form class="mt-8 space-y-6" onsubmit="loginUser(event)">
+      
+      <form class="mt-8 space-y-6" id="loginForm">
         <div class="rounded-md shadow-sm -space-y-px">
           <div class="mb-4">
             <label for="email" class="sr-only">Email address</label>
             <input id="email" name="email" type="email" autocomplete="email" required
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white bg-gray-800 rounded-t-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 sm:text-sm"
               placeholder="Email address">
+            <div id="email-error" class="error-message">Email tidak valid</div>
           </div>
           <div>
             <label for="password" class="sr-only">Password</label>
             <input id="password" name="password" type="password" autocomplete="current-password" required
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white bg-gray-800 rounded-b-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 sm:text-sm"
               placeholder="Password">
+            <div id="password-error" class="error-message">Password harus minimal 8 karakter</div>
           </div>
         </div>
 
@@ -62,52 +77,145 @@
           Belum punya akun? <a href="registrasi.html" class="text-yellow-400 hover:underline">Daftar di sini</a>
         </p>
       </form>
+      
+      <!-- Loading indicator -->
+      <div id="loading" class="hidden text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-500"></div>
+        <p class="mt-2 text-yellow-400">Memproses...</p>
+      </div>
     </div>
   </div>
 
   <script>
-    async function loginUser(e) {
-      e.preventDefault();
-      const email = e.target.email.value;
-      const password = e.target.password.value;
-      const rememberMe = e.target['remember-me'].checked;
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is already logged in
+      checkAuthStatus();
+      
+      // Form validation
+      setupFormValidation();
+      
+      // Form submission
+      document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    });
 
-      try {
-        const res = await fetch('http://localhost:3000/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, rememberMe })
-        });
-
-        const data = await res.json();
-        
-        if (res.ok) {
-          // Simpan token di localStorage jika remember me dicentang
-          if (rememberMe && data.token) {
-            localStorage.setItem('authToken', data.token);
-          } else if (data.token) {
-            sessionStorage.setItem('authToken', data.token);
-          }
-          
-          alert('Login berhasil! Selamat datang kembali.');
-          window.location.href = 'dashboard.html'; // Ganti dengan halaman setelah login
-        } else {
-          alert('Login gagal: ' + (data.message || 'Email atau password salah'));
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat melakukan login');
+    function checkAuthStatus() {
+      const authToken = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      
+      if (authToken && currentUser && currentUser.loggedIn) {
+        // User is already logged in, redirect to dashboard
+        window.location.href = 'dashboard.html';
       }
     }
 
-    // Cek jika sudah login (ada token)
-    document.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-      if (token) {
-        // Jika sudah login, redirect ke dashboard
-        window.location.href = 'dashboard.html';
+    function setupFormValidation() {
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      
+      emailInput.addEventListener('input', function() {
+        validateEmail(this.value);
+      });
+      
+      passwordInput.addEventListener('input', function() {
+        validatePassword(this.value);
+      });
+    }
+
+    function validateEmail(email) {
+      const emailError = document.getElementById('email-error');
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!re.test(email)) {
+        emailInput.classList.add('input-error');
+        emailError.style.display = 'block';
+        return false;
+      } else {
+        emailInput.classList.remove('input-error');
+        emailError.style.display = 'none';
+        return true;
       }
-    });
+    }
+
+    function validatePassword(password) {
+      const passwordError = document.getElementById('password-error');
+      
+      if (password.length < 8) {
+        passwordInput.classList.add('input-error');
+        passwordError.style.display = 'block';
+        return false;
+      } else {
+        passwordInput.classList.remove('input-error');
+        passwordError.style.display = 'none';
+        return true;
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('remember-me').checked;
+      
+      // Validate inputs
+      const isEmailValid = validateEmail(email);
+      const isPasswordValid = validatePassword(password);
+      
+      if (!isEmailValid || !isPasswordValid) {
+        return;
+      }
+      
+      // Show loading indicator
+      document.getElementById('loading').classList.remove('hidden');
+      document.getElementById('loginForm').classList.add('hidden');
+      
+      try {
+        // In a real app, you would call your backend API here
+        // For demo purposes, we'll check against localStorage users
+        const users = JSON.parse(localStorage.getItem('hairlightUsers')) || [];
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        if (user) {
+          // Create auth token (in real app, this would come from backend)
+          const authToken = generateToken();
+          
+          // Save auth data
+          if (rememberMe) {
+            localStorage.setItem('authToken', authToken);
+          } else {
+            sessionStorage.setItem('authToken', authToken);
+          }
+          
+          // Save user data
+          const currentUser = {
+            email: user.email,
+            name: user.name,
+            loggedIn: true,
+            lastLogin: new Date().toISOString()
+          };
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          
+          // Redirect to dashboard
+          window.location.href = 'dashboard.html';
+        } else {
+          throw new Error('Email atau password salah');
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        // Hide loading indicator
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+      }
+    }
+
+    function generateToken() {
+      // Simple token generator for demo purposes
+      return 'token-' + Math.random().toString(36).substr(2) + Date.now().toString(36);
+    }
   </script>
 </body>
 </html>
