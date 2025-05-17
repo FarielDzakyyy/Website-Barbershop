@@ -87,135 +87,27 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Check if user is already logged in
-      checkAuthStatus();
-      
-      // Form validation
-      setupFormValidation();
-      
-      // Form submission
-      document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Mencegah form submit secara default (reload halaman)
+
+      // Mengambil data dari form
+      const formData = new FormData(this);
+
+      // Mengirimkan data menggunakan fetch
+      fetch('login.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Menampilkan respons dari PHP (misalnya pesan login berhasil atau error)
+        document.getElementById('response').innerText = data.message;
+      })
+      .catch(error => console.error('Error:', error));
     });
-
-    function checkAuthStatus() {
-      const authToken = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      
-      if (authToken && currentUser && currentUser.loggedIn) {
-        // User is already logged in, redirect to dashboard
-        window.location.href = 'dashboard.html';
-      }
-    }
-
-    function setupFormValidation() {
-      const emailInput = document.getElementById('email');
-      const passwordInput = document.getElementById('password');
-      
-      emailInput.addEventListener('input', function() {
-        validateEmail(this.value);
-      });
-      
-      passwordInput.addEventListener('input', function() {
-        validatePassword(this.value);
-      });
-    }
-
-    function validateEmail(email) {
-      const emailError = document.getElementById('email-error');
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
-      if (!re.test(email)) {
-        emailInput.classList.add('input-error');
-        emailError.style.display = 'block';
-        return false;
-      } else {
-        emailInput.classList.remove('input-error');
-        emailError.style.display = 'none';
-        return true;
-      }
-    }
-
-    function validatePassword(password) {
-      const passwordError = document.getElementById('password-error');
-      
-      if (password.length < 8) {
-        passwordInput.classList.add('input-error');
-        passwordError.style.display = 'block';
-        return false;
-      } else {
-        passwordInput.classList.remove('input-error');
-        passwordError.style.display = 'none';
-        return true;
-      }
-    }
-
-    async function handleLogin(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const rememberMe = document.getElementById('remember-me').checked;
-      
-      // Validate inputs
-      const isEmailValid = validateEmail(email);
-      const isPasswordValid = validatePassword(password);
-      
-      if (!isEmailValid || !isPasswordValid) {
-        return;
-      }
-      
-      // Show loading indicator
-      document.getElementById('loading').classList.remove('hidden');
-      document.getElementById('loginForm').classList.add('hidden');
-      
-      try {
-        // In a real app, you would call your backend API here
-        // For demo purposes, we'll check against localStorage users
-        const users = JSON.parse(localStorage.getItem('hairlightUsers')) || [];
-        const user = users.find(u => u.email === email && u.password === password);
-        
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        if (user) {
-          // Create auth token (in real app, this would come from backend)
-          const authToken = generateToken();
-          
-          // Save auth data
-          if (rememberMe) {
-            localStorage.setItem('authToken', authToken);
-          } else {
-            sessionStorage.setItem('authToken', authToken);
-          }
-          
-          // Save user data
-          const currentUser = {
-            email: user.email,
-            name: user.name,
-            loggedIn: true,
-            lastLogin: new Date().toISOString()
-          };
-          localStorage.setItem('currentUser', JSON.stringify(currentUser));
-          
-          // Redirect to dashboard
-          window.location.href = 'dashboard.html';
-        } else {
-          throw new Error('Email atau password salah');
-        }
-      } catch (error) {
-        alert(error.message);
-      } finally {
-        // Hide loading indicator
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('loginForm').classList.remove('hidden');
-      }
-    }
-
-    function generateToken() {
-      // Simple token generator for demo purposes
-      return 'token-' + Math.random().toString(36).substr(2) + Date.now().toString(36);
-    }
   </script>
+</body>
+</html>
+
 </body>
 </html>

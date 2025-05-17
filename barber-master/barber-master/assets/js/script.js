@@ -88,3 +88,36 @@ const filter = function () {
 }
 
 addEventOnElem(filterBtns, "click", filter);
+
+fetch("booking.php", {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: new URLSearchParams({
+    user_id: 1,
+    booking_date: "2025-05-07",
+    start_time: "14:00"
+  })
+})
+.then(res => res.json())
+.then(data => alert(data.message));
+
+fetch("user_bookings.php?user_id=1")
+  .then(res => res.json())
+  .then(data => console.log(data));
+
+fetch("schedule.php?date=2025-05-07")
+  .then(res => res.json())
+  .then(data => console.log(data));
+
+fetch("update_chair_status.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      chair_id: 2,
+      is_active: 0 // nonaktifkan kursi
+    })
+  })
+  .then(res => res.json())
+  .then(data => alert(data.message));
+  
+
