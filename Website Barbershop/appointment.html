@@ -160,10 +160,6 @@
 
      </header>
 
-
-
-
-
      <main>
           <article>
 
@@ -215,47 +211,89 @@
                                         kami. Cepat, mudah, dan pastikan tempat Anda!
                                    </p>
 
-                                   <form action="appointment.php" method="POST" class="appoin-form">
-
+                                   <form id="appointmentForm" action="appointment.php" method="POST" class="appoin-form">
 
                                         <div class="input-wrapper">
-                                             <input type="text" name="name" placeholder="Your Full Name" required
-                                                  class="input-field">
+                                             <div class="input-group">
+                                                  <input type="text" name="name" placeholder="Your Full Name" required
+                                                       class="input-field" id="nameInput">
+                                                  <div class="input-icon">
+                                                       <ion-icon name="person-outline"></ion-icon>
+                                                  </div>
+                                             </div>
 
-                                             <input type="email" name="email_address" placeholder="Email Address"
-                                                  required class="input-field">
+                                             <div class="input-group">
+                                                  <input type="email" name="email_address" placeholder="Email Address"
+                                                       required class="input-field" id="emailInput">
+                                                  <div class="input-icon">
+                                                       <ion-icon name="mail-outline"></ion-icon>
+                                                  </div>
+                                             </div>
                                         </div>
 
                                         <div class="input-wrapper">
-                                             <input type="text" name="phone" placeholder="Phone Number" required
-                                                  class="input-field">
+                                             <div class="input-group">
+                                                  <input type="text" name="phone" placeholder="Phone Number" required
+                                                       class="input-field" id="phoneInput">
+                                                  <div class="input-icon">
+                                                       <ion-icon name="call-outline"></ion-icon>
+                                                  </div>
+                                             </div>
 
-                                             <select name="category" class="input-field">
-
-                                                  <option value="Select category">Select category</option>
-                                                  <option value="Beauty & spa">Beauty & spa</option>
-                                                  <option value="Body massage">Body massage</option>
-                                                  <option value="Shaving & Facial">Shaving & Facial</option>
-                                                  <option value="Hair Color">Hair Color</option>
-
-                                             </select>
+                                             <div class="input-group">
+                                                  <select name="category" class="input-field" id="serviceSelect" required>
+                                                       <option value="" disabled selected>Select service</option>
+                                                       <option value="Beauty & spa">💆 Beauty & spa</option>
+                                                       <option value="Body massage">💪 Body massage</option>
+                                                       <option value="Shaving & Facial">✂️ Shaving & Facial</option>
+                                                       <option value="Hair Color">🎨 Hair Color</option>
+                                                  </select>
+                                             <div class="input-icon">
+                                                  <ion-icon name="cut-outline"></ion-icon>
+                                                  </div>
+                                             </div>
                                         </div>
 
-                                        <input type="date" name="date" required class="input-field date">
+                                        <div class="input-wrapper">
+                                             <div class="input-group">
+                                                  <input type="date" name="date" required class="input-field date" id="dateInput">
+                                                  <div class="input-icon">
+                                                       <ion-icon name="calendar-outline"></ion-icon>
+                                                  </div>
+                                             </div>
 
-                                        <input type="time" name="time" required class="input-field">
+                                             <div class="input-group">
+                                                  <input type="time" name="time" required class="input-field" id="timeInput">
+                                                  <div class="input-icon">
+                                                       <ion-icon name="time-outline"></ion-icon>
+                                                  </div>
+                                             </div>
+                                        </div>
 
-                                        <textarea name="message" placeholder="Write Message" required
-                                             class="input-field"></textarea>
+                                        <div class="input-group">
+                                             <textarea name="message" placeholder="Write Message (Optional)"
+                                                  class="input-field" id="messageInput"></textarea>
+                                             <div class="input-icon">
+                                                  <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                                             </div>
+                                        </div>
                                             
-                                        <button type="submit" class="form-btn">
-                                             <span class="span">Appointment Now</span>
+                                        <button type="submit" class="form-btn" id="submitBtn">
+                                             <span class="span">Book Appointment</span>
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </button>
 
-                                   </form>
+                                        <div id="formSuccess" class="form-success-message">
+                                             <ion-icon name="checkmark-circle" class="success-icon"></ion-icon>
+                                             <p>Your appointment has been booked successfully!</p>
+                                        </div>
 
-                                   <!-- Tambahkan ini setelah </form> di bagian appointment -->
+                                        <div id="formError" class="form-error-message">
+                                             <ion-icon name="alert-circle" class="error-icon"></ion-icon>
+                                             <p>Please fill in all required fields correctly.</p>
+                                        </div>
+
+                                   </form>
 
                               </div>
 
@@ -290,6 +328,7 @@
     - custom js link
   -->
      <script src="./assets/js/script.js" defer></script>
+     <script src="./assets/js/appointment.js" defer></script>
 
      <!-- 
     - ionicon link

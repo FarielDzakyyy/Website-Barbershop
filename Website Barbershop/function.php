@@ -1,5 +1,5 @@
 <?php
-$koneksi = mysqli_connect("localhost", "root", "", "barber");
+$koneksi = mysqli_connect("localhost", "root", "", "webif");
 
 // Cek koneksi
 if (!$koneksi) {
