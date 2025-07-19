@@ -1,3 +1,14 @@
+<?php
+
+session_start();
+if (!isset($_SESSION['username'])) {
+  header("Location: login.php");
+  exit;
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -120,27 +131,27 @@
           <ul class="navbar-list">
 
             <li class="navbar-item">
-              <a href="home.html" class="navbar-link" data-nav-link>Home</a>
+              <a href="home.php" class="navbar-link" data-nav-link>Home</a>
             </li>
 
             <li class="navbar-item">
-              <a href="services.html" class="navbar-link" data-nav-link>Services</a>
+              <a href="services.php" class="navbar-link" data-nav-link>Services</a>
             </li>
 
             <li class="navbar-item">
-              <a href="pricing.html" class="navbar-link" data-nav-link>Pricing</a>
+              <a href="pricing.php" class="navbar-link" data-nav-link>Pricing</a>
             </li>
 
             <li class="navbar-item">
-              <a href="gallery.html" class="navbar-link" data-nav-link>Gallery</a>
+              <a href="gallery.php" class="navbar-link" data-nav-link>Gallery</a>
             </li>
 
             <li class="navbar-item">
-              <a href="appointment.html" class="navbar-link" data-nav-link>Appointment</a>
+              <a href="appointment.php" class="navbar-link" data-nav-link>Appointment</a>
             </li>
 
             <li class="navbar-item">
-              <a href="contact.html" class="navbar-link" data-nav-link>Contact</a>
+              <a href="contact.php" class="navbar-link" data-nav-link>Contact</a>
             </li>
 
             <li class="navbar-item">
@@ -154,7 +165,7 @@
           <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
         </button>
 
-        <a href="appointment.html" class="btn has-before">
+        <a href="appointment.php" class="btn has-before">
           <span class="span">Appointment</span>
 
           <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>

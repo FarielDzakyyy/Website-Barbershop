@@ -5,411 +5,374 @@ $success = false;
 $error = "";
 
 if (isset($_POST["register"])) {
-    $username = strtolower(stripslashes($_POST["username"]));
-    $password1 = mysqli_real_escape_string($koneksi, $_POST["password1"]);
-    $password2 = mysqli_real_escape_string($koneksi, $_POST["password2"]);
+  $username = strtolower(stripslashes($_POST["username"]));
+  $password1 = mysqli_real_escape_string($koneksi, $_POST["password1"]);
+  $password2 = mysqli_real_escape_string($koneksi, $_POST["password2"]);
 
-    // Cek username sudah ada atau belum
-    $result = mysqli_query($koneksi, "SELECT username FROM users WHERE username = '$username'");
-    if (mysqli_fetch_assoc($result)) {
-        $error = "Username already registered";
-    } elseif ($password1 !== $password2) {
-        $error = "Password confirmation doesn't match";
+  // Cek username sudah ada atau belum
+  $result = mysqli_query($koneksi, "SELECT username FROM users WHERE username = '$username'");
+  if (mysqli_fetch_assoc($result)) {
+    $error = "Username sudah terdaftar.";
+  } elseif ($password1 !== $password2) {
+    $error = "Konfirmasi password tidak sesuai.";
+  } else {
+    // Enkripsi password
+    $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
+    // Simpan user baru
+    $query = "INSERT INTO users (username, password) VALUES ('$username', '$passwordHash')";
+    if (mysqli_query($koneksi, $query)) {
+      header("Location: login.php?success=1");
+      exit;
     } else {
-        // Enkripsi password
-        $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
-        // Simpan user baru
-        $query = "INSERT INTO users (username, password) VALUES ('$username', '$passwordHash')";
-        if (mysqli_query($koneksi, $query)) {
-            header("Location: login.php?success=1");
-            exit;
-        } else {
-            $error = "Registration failed. Please try again.";
-        }
+      $error = "Gagal mendaftar. Silakan coba lagi.";
     }
+  }
+}
+?>
+
+<?php
+require 'function.php'; // koneksi ke database
+
+$success = false;
+$error = "";
+
+if (isset($_POST["register"])) {
+  $username = strtolower(stripslashes($_POST["username"]));
+  $password1 = mysqli_real_escape_string($koneksi, $_POST["password1"]);
+  $password2 = mysqli_real_escape_string($koneksi, $_POST["password2"]);
+
+  $result = mysqli_query($koneksi, "SELECT username FROM users WHERE username = '$username'");
+  if (mysqli_fetch_assoc($result)) {
+    $error = "Username sudah terdaftar.";
+  } elseif ($password1 !== $password2) {
+    $error = "Konfirmasi password tidak sesuai.";
+  } else {
+    $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
+    $query = "INSERT INTO users (username, password) VALUES ('$username', '$passwordHash')";
+    if (mysqli_query($koneksi, $query)) {
+      header("Location: login.php?success=1");
+      exit;
+    } else {
+      $error = "Gagal mendaftar. Silakan coba lagi.";
+    }
+  }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register | Premium Access</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Akun - Barber</title>
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
-      --gold: #D4AF37;
-      --gold-light: #FFD700;
-      --gold-dark: #996515;
-      --black: #121212;
-      --black-light: #1E1E1E;
-      --white: #FFFFFF;
-      --gray: #E0E0E0;
+      --main-color: #ffe600;
+      --accent-color: #ffcc00;
+      --bg-color: #0e0e0e;
+      --text-color: #ffffff;
+      --input-bg: rgba(255, 255, 255, 0.1);
+      --label-color: #cccccc;
+      --card-bg: rgba(255, 255, 255, 0.05);
     }
-    
+
+    [data-theme="light"] {
+      --main-color: #ffc800;
+      --accent-color: #f9aa00;
+      --bg-color: #ffffff;
+      --text-color: #1a1a1a;
+      --input-bg: rgba(240, 240, 240, 1);
+      --label-color: #666;
+      --card-bg: rgba(255, 255, 255, 0.95);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: var(--black);
-      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      color: var(--white);
-    }
-
-    .register-container {
-      max-width: 600px;
-      width: 100%;
-    }
-
-    .register-card {
-      background-color: var(--black-light);
-      border: 2px solid var(--gold);
-      border-radius: 16px;
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15);
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-    }
-
-    .register-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 50px rgba(212, 175, 55, 0.25);
-    }
-
-    .card-header {
-      background: linear-gradient(135deg, var(--black-light), var(--black));
-      color: var(--gold);
-      padding: 2.5rem;
-      text-align: center;
-      border-bottom: 2px solid var(--gold);
-    }
-
-    .card-header h2 {
-      font-weight: 700;
       margin: 0;
-      font-size: 2.2rem;
-      letter-spacing: 1px;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background 0.5s ease, color 0.5s ease;
     }
 
-    .card-body {
-      padding: 3rem;
+    #register-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transform: translateY(60px);
+      opacity: 0;
+      position: relative;
+      z-index: 1;
     }
 
-    .form-label {
-      color: var(--gold);
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 0.8rem;
+    h2 {
+      text-align: center;
+      font-weight: 700;
+      color: var(--main-color);
+      margin-bottom: 30px;
     }
 
-    .form-control {
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--gold);
-      border-radius: 10px;
-      padding: 15px 20px;
-      transition: all 0.3s;
-      color: var(--white);
-      font-size: 1.1rem;
-      height: auto;
+    .input-group {
+      position: relative;
+      margin-bottom: 30px;
     }
 
-    .form-control:focus {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-color: var(--gold-light);
-      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
-      color: var(--white);
+    .input-group input {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 12px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      background-clip: padding-box;
+      border: none;
+      font-size: 1rem;
+      outline: none;
     }
 
-    .form-control::placeholder {
-      color: rgba(255, 255, 255, 0.4);
+    .input-group label {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      font-size: 1rem;
+      color: var(--label-color);
+      pointer-events: none;
+      background: transparent;
+      transition: all 0.3s ease;
     }
 
-    .input-group-text {
-      background-color: transparent;
-      border-right: none;
-      color: var(--gold);
-      font-size: 1.1rem;
-      padding-right: 0;
+    .input-group input:focus+label,
+    .input-group input:not(:placeholder-shown)+label {
+      top: -10px;
+      left: 10px;
+      font-size: 0.75rem;
+      transform: scale(0.95);
+      color: var(--main-color);
+      background: var(--card-bg);
+      padding: 0 5px;
     }
 
-    .input-group .form-control {
-      border-left: none;
-      padding-left: 10px;
+    input:-webkit-autofill {
+      box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+      -webkit-text-fill-color: var(--text-color) !important;
+      transition: background-color 5000s ease-in-out 0s;
     }
 
     .btn-register {
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      width: 100%;
+      padding: 14px;
       border: none;
-      border-radius: 10px;
-      padding: 16px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-      transition: all 0.4s;
-      position: relative;
-      overflow: hidden;
-      margin-top: 1rem;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 1rem;
+      background: linear-gradient(to right, var(--main-color), var(--accent-color));
+      color: #000;
+      box-shadow: 0 6px 0 #bfa500, 0 10px 30px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
     }
 
     .btn-register:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+      box-shadow: 0 8px 0 #a08d00, 0 14px 40px rgba(0, 0, 0, 0.6);
     }
 
     .btn-register:active {
-      transform: translateY(0);
+      transform: scale(0.97);
     }
 
-    .btn-register::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: 0.5s;
+    .form-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
     }
 
-    .btn-register:hover::before {
-      left: 100%;
-    }
-
-    .link {
-      color: var(--gold-light);
+    .form-footer a {
+      color: var(--main-color);
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s;
-      position: relative;
-      font-size: 1rem;
     }
 
-    .link:hover {
-      color: var(--white);
+    .form-footer a:hover {
+      color: var(--text-color);
+      text-decoration: underline;
     }
 
-    .link::after {
-      content: '';
+    .mode-toggle {
       position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--gold-light);
-      transition: width 0.3s;
-    }
-
-    .link:hover::after {
-      width: 100%;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 16px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--main-color);
+      padding: 8px 12px;
+      border-radius: 30px;
+      color: var(--main-color);
       cursor: pointer;
-      color: var(--gold);
-      font-size: 1.1rem;
-      z-index: 5;
+      font-size: 0.85rem;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
 
-    .alert-notification {
-      position: fixed;
-      top: 30px;
-      right: 30px;
-      z-index: 1000;
-      border-radius: 10px;
-      padding: 1.2rem 1.5rem;
-      font-weight: 600;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      animation: slideIn 0.6s forwards, fadeOut 0.6s 4s forwards;
+    .mode-toggle:hover {
+      background: var(--main-color);
+      color: #000;
+      transform: scale(1.05);
     }
 
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+    .alert {
+      font-size: 0.85rem;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 15px;
     }
 
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-
-    .spinner-border {
-      width: 1.3rem;
-      height: 1.3rem;
-      border-width: 0.2em;
-    }
-
-    .password-strength {
-      height: 5px;
-      background-color: var(--black-light);
-      border-radius: 5px;
-      margin-top: 5px;
-      overflow: hidden;
-    }
-
-    .strength-meter {
-      height: 100%;
-      width: 0;
-      transition: width 0.3s, background-color 0.3s;
+    @media (max-width: 480px) {
+      #register-card {
+        padding: 30px 20px;
+      }
     }
   </style>
 </head>
 
-<body>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="register-container">
-        <?php if (!empty($error)) : ?>
-          <div class="alert alert-danger alert-notification">
-            <i class="fas fa-exclamation-circle me-2"></i> <?= $error ?>
-          </div>
-        <?php endif; ?>
+<body data-theme="light">
+  <!-- Particle Background -->
+  <div id="particles-js" style="position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%;"></div>
 
-        <div class="register-card">
-          <div class="card-header">
-            <h2><i class="fas fa-user-plus me-2"></i>REGISTER</h2>
-          </div>
-          <div class="card-body">
-            <form action="" method="post">
-              <div class="mb-4">
-                <label for="username" class="form-label">USERNAME</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fas fa-user"></i></span>
-                  <input type="text" class="form-control" id="username" name="username" required placeholder="Enter your username">
-                </div>
-              </div>
-              
-              <div class="mb-4 position-relative">
-                <label for="password1" class="form-label">PASSWORD</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                  <input type="password" class="form-control" id="password1" name="password1" required placeholder="Enter your password">
-                  <span class="password-toggle" id="togglePassword1">
-                    <i class="far fa-eye"></i>
-                  </span>
-                </div>
-                <div class="password-strength">
-                  <div class="strength-meter" id="passwordStrength"></div>
-                </div>
-              </div>
+  <div id="register-card">
+    <button class="mode-toggle" onclick="toggleMode()" id="modeToggle">☀️ Light Mode</button>
+    <h2>Register Akun</h2>
 
-              <div class="mb-4 position-relative">
-                <label for="password2" class="form-label">CONFIRM PASSWORD</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                  <input type="password" class="form-control" id="password2" name="password2" required placeholder="Confirm your password">
-                  <span class="password-toggle" id="togglePassword2">
-                    <i class="far fa-eye"></i>
-                  </span>
-                </div>
-              </div>
+    <?php if (!empty($error)) : ?>
+      <div class="alert alert-danger"><?= $error ?></div>
+    <?php endif; ?>
 
-              <div class="d-grid gap-2 mb-4">
-                <button type="submit" name="register" class="btn btn-register">
-                  <span class="register-text">REGISTER</span>
-                  <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                </button>
-              </div>
-
-              <div class="text-center mt-4 pt-3" style="border-top: 1px solid rgba(212, 175, 55, 0.3);">
-                <p class="mb-0" style="font-size: 1.1rem;">Already have an account? <a href="login.php" class="link">LOGIN HERE</a></p>
-              </div>
-            </form>
-          </div>
-        </div>
+    <form action="" method="post">
+      <div class="input-group">
+        <input type="text" name="username" id="username" placeholder=" " required>
+        <label for="username">Username</label>
       </div>
+      <div class="input-group">
+        <input type="password" name="password1" id="password1" placeholder=" " required>
+        <label for="password1">Password</label>
+      </div>
+      <div class="input-group">
+        <input type="password" name="password2" id="password2" placeholder=" " required>
+        <label for="password2">Konfirmasi Password</label>
+      </div>
+      <button type="submit" name="register" class="btn-register">Daftar</button>
+    </form>
+
+    <div class="form-footer">
+      Sudah punya akun? <a href="login.php">Login di sini</a>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- GSAP for animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Password toggle
-      const togglePassword1 = document.querySelector('#togglePassword1');
-      const password1 = document.querySelector('#password1');
-      const togglePassword2 = document.querySelector('#togglePassword2');
-      const password2 = document.querySelector('#password2');
-      
-      togglePassword1.addEventListener('click', function() {
-        const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
-        password1.setAttribute('type', type);
-        this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+    window.addEventListener("load", () => {
+      gsap.to("#register-card", {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out"
       });
+    });
 
-      togglePassword2.addEventListener('click', function() {
-        const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
-        password2.setAttribute('type', type);
-        this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
-      });
+    // Theme Toggle with LocalStorage
+    const body = document.body;
+    const toggle = document.getElementById("modeToggle");
+    const savedTheme = localStorage.getItem("theme");
 
-      // Password strength meter
-      password1.addEventListener('input', function() {
-        const strengthMeter = document.getElementById('passwordStrength');
-        const strength = calculatePasswordStrength(this.value);
-        
-        strengthMeter.style.width = strength.percentage + '%';
-        strengthMeter.style.backgroundColor = strength.color;
-      });
+    if (savedTheme) {
+      body.setAttribute("data-theme", savedTheme);
+      toggle.innerHTML = savedTheme === "dark" ? "🌙 Dark Mode" : "☀️ Light Mode";
+    }
 
-      function calculatePasswordStrength(password) {
-        let strength = 0;
-        
-        // Length check
-        if (password.length > 0) strength += 10;
-        if (password.length >= 8) strength += 20;
-        if (password.length >= 12) strength += 20;
-        
-        // Character diversity
-        if (/[A-Z]/.test(password)) strength += 15;
-        if (/[0-9]/.test(password)) strength += 15;
-        if (/[^A-Za-z0-9]/.test(password)) strength += 20;
-        
-        // Cap at 100
-        strength = Math.min(strength, 100);
-        
-        // Determine color
-        let color;
-        if (strength < 40) color = '#f72585'; // red
-        else if (strength < 70) color = '#f8961e'; // orange
-        else color = '#4cc9f0'; // blue/green
-        
-        return { percentage: strength, color: color };
-      }
+    function toggleMode() {
+      const currentTheme = body.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      body.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      toggle.innerHTML = newTheme === "dark" ? "🌙 Dark Mode" : "☀️ Light Mode";
+    }
+  </script>
 
-      // Form submission loading state
-      const registerForm = document.querySelector('form');
-      if (registerForm) {
-        registerForm.addEventListener('submit', function() {
-          const submitBtn = this.querySelector('button[type="submit"]');
-          const spinner = submitBtn.querySelector('.spinner-border');
-          const btnText = submitBtn.querySelector('.register-text');
-          
-          if (this.checkValidity()) {
-            spinner.classList.remove('d-none');
-            btnText.textContent = 'REGISTERING...';
-            submitBtn.disabled = true;
+  <!-- Particle.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
           }
-        });
-      }
-
-      // Input focus effects
-      const inputs = document.querySelectorAll('.form-control');
-      inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-          this.style.borderColor = 'var(--gold-light)';
-          this.parentElement.parentElement.querySelector('.form-label').style.color = 'var(--gold-light)';
-        });
-        
-        input.addEventListener('blur', function() {
-          this.style.borderColor = 'var(--gold)';
-          this.parentElement.parentElement.querySelector('.form-label').style.color = 'var(--gold)';
-        });
-      });
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle"
+        },
+        "opacity": {
+          "value": 0.5
+        },
+        "size": {
+          "value": 3
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ffffff",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "repulse"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "repulse": {
+            "distance": 100
+          },
+          "push": {
+            "particles_nb": 4
+          }
+        }
+      },
+      "retina_detect": true
     });
   </script>
 </body>
+
 </html>
