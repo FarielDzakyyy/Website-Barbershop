@@ -1,233 +1,240 @@
-'use strict';
+"use strict";
 
-document.addEventListener('DOMContentLoaded', function() {
-    const appointmentForm = document.getElementById('appointmentForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const formSuccess = document.getElementById('formSuccess');
-    const formError = document.getElementById('formError');
-    
-    // Form validation
-    appointmentForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        formSuccess.style.display = 'none';
-        formError.style.display = 'none';
-        
-        const nameInput = document.getElementById('nameInput');
-        const emailInput = document.getElementById('emailInput');
-        const phoneInput = document.getElementById('phoneInput');
-        const serviceSelect = document.getElementById('serviceSelect');
-        const dateInput = document.getElementById('dateInput');
-        const timeInput = document.getElementById('timeInput');
-        
-        let isValid = true;
-        
-        // Validate name
-        if (nameInput.value.trim() === '') {
-            nameInput.style.borderColor = '#e74c3c';
-            isValid = false;
-        } else {
-            nameInput.style.borderColor = '';
-        }
-        
-        // Validate email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailInput.value.trim())) {
-            emailInput.style.borderColor = '#e74c3c';
-            isValid = false;
-        } else {
-            emailInput.style.borderColor = '';
-        }
-        
-        // Validate phone (simple validation)
-        if (phoneInput.value.trim() === '' || phoneInput.value.trim().length < 8) {
-            phoneInput.style.borderColor = '#e74c3c';
-            isValid = false;
-        } else {
-            phoneInput.style.borderColor = '';
-        }
-        
-        // Validate service
-        if (serviceSelect.value === '') {
-            serviceSelect.style.borderColor = '#e74c3c';
-            isValid = false;
-        } else {
-            serviceSelect.style.borderColor = '';
-        }
-        
-        // Validate date
-        if (dateInput.value === '') {
-            dateInput.style.borderColor = '#e74c3c';
-            isValid = false;
-        } else {
-            dateInput.style.borderColor = '';
-        }
-        
-        // Validate time
-        if (timeInput.value === '') {
-            timeInput.style.borderColor = '#e74c3c';
-            isValid = false;
-        } else {
-            timeInput.style.borderColor = '';
-        }
-        
-        if (isValid) {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="span">Processing...</span>';
-            
-            setTimeout(function() {
-                formSuccess.style.display = 'flex';
-                
-                appointmentForm.reset();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span class="span">Book Appointment</span><ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>';
-                
-                setTimeout(function() {
-                    formSuccess.style.display = 'none';
-                }, 5000);
-            }, 1500);
-        } else {
-            formError.style.display = 'flex';
-        }
+// Jalankan hanya di appointment.php
+document.addEventListener("DOMContentLoaded", function () {
+  if (!window.location.pathname.includes("appointment.php")) return;
+
+  const appointmentForm = document.getElementById("appointmentForm");
+  const submitBtn = document.getElementById("submitBtn");
+
+  appointmentForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const nameInput = document.getElementById("nameInput");
+    const emailInput = document.getElementById("emailInput");
+    const phoneInput = document.getElementById("phoneInput");
+    const serviceSelect = document.getElementById("serviceSelect");
+    const dateInput = document.getElementById("dateInput");
+    const timeInput = document.getElementById("timeInput");
+
+    let isValid = true;
+
+    // Validasi manual
+    if (nameInput.value.trim() === "") {
+      nameInput.style.borderColor = "#e74c3c";
+      isValid = false;
+    } else {
+      nameInput.style.borderColor = "";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailInput.value.trim())) {
+      emailInput.style.borderColor = "#e74c3c";
+      isValid = false;
+    } else {
+      emailInput.style.borderColor = "";
+    }
+
+    if (phoneInput.value.trim().length < 8) {
+      phoneInput.style.borderColor = "#e74c3c";
+      isValid = false;
+    } else {
+      phoneInput.style.borderColor = "";
+    }
+
+    if (serviceSelect.value === "") {
+      serviceSelect.style.borderColor = "#e74c3c";
+      isValid = false;
+    } else {
+      serviceSelect.style.borderColor = "";
+    }
+
+    if (dateInput.value === "") {
+      dateInput.style.borderColor = "#e74c3c";
+      isValid = false;
+    } else {
+      dateInput.style.borderColor = "";
+    }
+
+    if (timeInput.value === "") {
+      timeInput.style.borderColor = "#e74c3c";
+      isValid = false;
+    } else {
+      timeInput.style.borderColor = "";
+    }
+
+    if (!isValid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Form tidak valid',
+        text: 'Mohon lengkapi semua isian dengan benar.',
+        confirmButtonColor: '#ffc800'
+      });
+      return;
+    }
+
+    // Proses kirim form dengan SweetAlert loading
+    Swal.fire({
+      title: 'Memproses...',
+      text: 'Mohon tunggu sebentar',
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      allowOutsideClick: false
     });
-    
-    const inputs = document.querySelectorAll('.input-field');
-    inputs.forEach(input => {
-        input.addEventListener('input', function() {
-            this.style.borderColor = '';
-            formError.style.display = 'none';
+
+    // Submit pakai AJAX ke appointment.php
+    const formData = new FormData(appointmentForm);
+    fetch("appointment.php", {
+      method: "POST",
+      body: formData
+    })
+      .then((response) => response.text())
+      .then((res) => {
+        Swal.close();
+        if (res.includes("Appointment berhasil")) {
+          Swal.fire({
+            icon: "success",
+            title: "Sukses!",
+            text: "Appointment berhasil dibuat.",
+            confirmButtonColor: "#28a745"
+          }).then(() => {
+            window.location.href = "booking.php";
+          });
+        } else if (res.includes("sudah dipesan")) {
+          Swal.fire({
+            icon: "warning",
+            title: "Jadwal Penuh",
+            text: "Waktu tersebut sudah dipesan. Pilih waktu lain.",
+            confirmButtonColor: "#ffc800"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Gagal",
+            text: "Terjadi kesalahan. Silakan coba lagi.",
+            confirmButtonColor: "#dc3545"
+          });
+        }
+      })
+      .catch((err) => {
+        Swal.close();
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Gagal terhubung ke server.",
+          confirmButtonColor: "#dc3545"
         });
-    });
-    
-    const serviceSelect = document.getElementById('serviceSelect');
-    serviceSelect.addEventListener('change', function() {
-        if (this.value !== '') {
-            this.style.color = 'var(--white)';
-        } else {
-            this.style.color = 'var(--white_50)';
-        }
-    });
-    
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('dateInput').setAttribute('min', today);
+        console.error(err);
+      });
+  });
 
-    document.getElementById('timeInput').addEventListener('focus', function() {
-        this.setAttribute('min', '09:00');
-        this.setAttribute('max', '21:00');
+  // Styling & animasi field
+  const inputs = document.querySelectorAll(".input-field");
+  inputs.forEach((input) => {
+    input.addEventListener("input", function () {
+      this.style.borderColor = "";
     });
-    
-    const formElements = document.querySelectorAll('.input-group, .form-btn');
-    formElements.forEach((element, index) => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(20px)';
-        element.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
-        
-        setTimeout(() => {
-            element.style.opacity = '1';
-            element.style.transform = 'translateY(0)';
-        }, 100);
-    });
+  });
+
+  document.getElementById("serviceSelect").addEventListener("change", function () {
+    this.style.color = this.value !== "" ? "var(--white)" : "var(--white_50)";
+  });
+
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("dateInput").setAttribute("min", today);
+
+  document.getElementById("timeInput").addEventListener("focus", function () {
+    this.setAttribute("min", "09:00");
+    this.setAttribute("max", "21:00");
+  });
+
+  // Animasi form
+  const formElements = document.querySelectorAll(".input-group, .form-btn");
+  formElements.forEach((element, index) => {
+    element.style.opacity = "0";
+    element.style.transform = "translateY(20px)";
+    element.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+
+    setTimeout(() => {
+      element.style.opacity = "1";
+      element.style.transform = "translateY(0)";
+    }, 100);
+  });
 });
 
 /**
- * add event on element
+ * NAVBAR & HEADER
  */
-
 const addEventOnElem = function (elem, type, callback) {
   if (!elem) return;
-  
   if (elem.length > 1) {
     for (let i = 0; i < elem.length; i++) {
-      if (elem[i]) elem[i].addEventListener(type, callback);
+      elem[i]?.addEventListener(type, callback);
     }
   } else {
-    if (elem.addEventListener) elem.addEventListener(type, callback);
+    elem?.addEventListener(type, callback);
   }
-}
-
-
-/**
- * navbar toggle
- */
+};
 
 const navbar = document.querySelector("[data-navbar]");
 const navToggler = document.querySelector("[data-nav-toggler]");
 const navLinks = document.querySelectorAll("[data-nav-link]");
-
-const toggleNavbar = () => navbar.classList.toggle("active");
-
+const toggleNavbar = () => navbar?.classList.toggle("active");
+const closeNavbar = () => navbar?.classList.remove("active");
 addEventOnElem(navToggler, "click", toggleNavbar);
-
-const closeNavbar = () => navbar.classList.remove("active");
-
 addEventOnElem(navLinks, "click", closeNavbar);
-
-
-
-/**
- * header & back top btn active when scroll down to 100px
- */
 
 const header = document.querySelector("[data-header]");
 const backTopBtn = document.querySelector("[data-back-top-btn]");
-
 const headerActive = function () {
   if (window.scrollY > 100) {
-    header.classList.add("active");
-    backTopBtn.classList.add("active");
+    header?.classList.add("active");
+    backTopBtn?.classList.add("active");
   } else {
-    header.classList.remove("active");
-    backTopBtn.classList.remove("active");
+    header?.classList.remove("active");
+    backTopBtn?.classList.remove("active");
   }
-}
-
+};
 addEventOnElem(window, "scroll", headerActive);
 
-
-
 /**
- * filter function
+ * FILTER
  */
-
 const filterBtns = document.querySelectorAll("[data-filter-btn]");
 const filterItems = document.querySelectorAll("[data-filter]");
-
 let lastClickedFilterBtn = filterBtns[0];
 
-// Di dalam script.js, perbarui fungsi filter dengan ini:
 const filter = function () {
   lastClickedFilterBtn.classList.remove("active");
   this.classList.add("active");
   lastClickedFilterBtn = this;
 
-  // Animasi fade out sebelum filter
   for (let i = 0; i < filterItems.length; i++) {
-    filterItems[i].style.opacity = '0';
-    filterItems[i].style.transform = 'translateY(20px)';
+    filterItems[i].style.opacity = "0";
+    filterItems[i].style.transform = "translateY(20px)";
   }
 
-  // Setelah animasi fade out selesai, lakukan filter
   setTimeout(() => {
     for (let i = 0; i < filterItems.length; i++) {
-      if (this.dataset.filterBtn === filterItems[i].dataset.filter ||
-        this.dataset.filterBtn === "all") {
-
+      if (
+        this.dataset.filterBtn === filterItems[i].dataset.filter ||
+        this.dataset.filterBtn === "all"
+      ) {
         filterItems[i].style.display = "block";
         filterItems[i].classList.add("active");
-        
-        // Animasi fade in
-        setTimeout(() => {
-          filterItems[i].style.opacity = '1';
-          filterItems[i].style.transform = 'translateY(0)';
-          filterItems[i].style.transition = 'all 0.3s ease';
-        }, 50 * i);
 
+        setTimeout(() => {
+          filterItems[i].style.opacity = "1";
+          filterItems[i].style.transform = "translateY(0)";
+          filterItems[i].style.transition = "all 0.3s ease";
+        }, 50 * i);
       } else {
         filterItems[i].style.display = "none";
         filterItems[i].classList.remove("active");
       }
     }
   }, 300);
-}
+};
 
 addEventOnElem(filterBtns, "click", filter);

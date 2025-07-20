@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
-  exit;
+     header("Location: login.php");
+     exit;
 }
 ?>
 
@@ -374,7 +374,7 @@ if (!isset($_SESSION['username'])) {
                                         <li class="footer-list-item">
                                              <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
 
-                                             <span class="contact-link">Sun - Friday, 08 am - 09 pm</span>
+                                             <span class="contact-link">Monday - Saturday, 09 am - 09 pm</span>
                                         </li>
 
                                         <li class="footer-list-item">

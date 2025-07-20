@@ -2,73 +2,72 @@
 
 session_start();
 if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
-  exit;
+     header("Location: login.php");
+     exit;
 }
 
-// Konfigurasi koneksi database
-$host = "localhost";         // Server database, default = localhost
-$user = "root";              // Username default phpMyAdmin di XAMPP/Laragon
-$password = "";              // Password default biasanya kosong
-$dbname = "barber";          // Nama database yang kamu buat
+require 'function.php'; // koneksi harus ada di file ini
 
-// Membuat koneksi
-$conn = new mysqli($host, $user, $password, $dbname);
-
-// Periksa koneksi
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit;
 }
 
-// Cek jika data dikirim lewat metode POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ambil data dari form
-    $name = $_POST['name'];
-    $email = $_POST['email_address'];
-    $phone = $_POST['phone'];
-    $category = $_POST['category'];
-    $date = $_POST['date'];
-    $time = $_POST['time'];
-    $message = $_POST['message'];
+    $name = $_POST['name'] ?? '';
+    $email = $_POST['email_address'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $category = $_POST['category'] ?? '';
+    $date = $_POST['date'] ?? '';
+    $time = $_POST['time'] ?? '';
+    $message = $_POST['message'] ?? '';
 
-    // Simpan ke database
+    // Validasi dasar
+    if (empty($name) || empty($email) || empty($phone) || empty($date) || empty($time)) {
+        echo "<script>alert('Semua field wajib diisi!'); window.location.href='appointment.php';</script>";
+        exit;
+    }
 
     try {
+
         $cekSql = "SELECT * FROM appointments WHERE date = ? AND time = ?";
-        $cekStmt = $conn->prepare($cekSql);
+        $cekStmt = $koneksi->prepare($cekSql);
         $cekStmt->bind_param("ss", $date, $time);
         $cekStmt->execute();
         $result = $cekStmt->get_result();
 
         if ($result->num_rows > 0) {
             echo "<script>alert('Maaf, waktu tersebut sudah dipesan. Silakan pilih waktu lain.'); window.location.href='appointment.php';</script>";
+            exit;
         } else {
-            $sql = "INSERT INTO appointments (name, email_address, phone, category, date, time, message)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            $stmt = $conn->prepare($sql);
+            $sql = "INSERT INTO appointments (name, email_address, phone, category, date, time, message) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $koneksi->prepare($sql);
             $stmt->bind_param("sssssss", $name, $email, $phone, $category, $date, $time, $message);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Appointment berhasil dibuat!'); window.location.href='appointment.php';</script>";
+                echo "<script>alert('Appointment berhasil dibuat!'); window.location.href='booking.php';</script>";
             } else {
-                echo "Terjadi kesalahan: " . $stmt->error;
+                echo "<script>alert('Gagal insert: " . $stmt->error . "'); window.location.href='gagal.php';</script>";
             }
 
             $stmt->close();
         }
+
+        $cekStmt->close();
     } catch (Exception $e) {
-        echo "Terjadi kesalahan: " . $e->getMessage();
+        echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
     }
 }
-
-$conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -310,13 +309,37 @@ $conn->close();
                                              <div class="input-group">
                                                   <select name="category" class="input-field" id="serviceSelect" required>
                                                        <option value="" disabled selected>Select service</option>
-                                                       <option value="Beauty & spa">💆 Beauty & spa</option>
-                                                       <option value="Body massage">💪 Body massage</option>
-                                                       <option value="Shaving & Facial">✂️ Shaving & Facial</option>
-                                                       <option value="Hair Color">🎨 Hair Color</option>
+
+                                                       <!-- Hair Services -->
+                                                       <optgroup label="Hair Services">
+                                                            <option value="Hair Cutting Style">💇 Hair Cutting Style</option>
+                                                            <option value="Hair Cutting & Fitting">💈 Hair Cutting & Fitting</option>
+                                                            <option value="Hair Washing">🧴 Hair Washing</option>
+                                                            <option value="Hair Color & Wash">🎨 Hair Color & Wash</option>
+                                                            <option value="Multi Hair Colors">🌈 Multi Hair Colors</option>
+                                                       </optgroup>
+
+                                                       <!-- Facial Treatments -->
+                                                       <optgroup label="Facial Treatments">
+                                                            <option value="Facial & Face Wash">🧖 Facial & Face Wash</option>
+                                                            <option value="Shaving & Facial">✂️ Shaving & Facial</option>
+                                                            <option value="Stylist Shaving">🪒 Stylist Shaving</option>
+                                                       </optgroup>
+
+                                                       <!-- Body Treatments -->
+                                                       <optgroup label="Body Treatments">
+                                                            <option value="Body Massage">💪 Body Massage</option>
+                                                            <option value="Backbone Massage">🦴 Backbone Massage</option>
+                                                       </optgroup>
+
+                                                       <!-- Wellness -->
+                                                       <optgroup label="Wellness">
+                                                            <option value="Beauty & Spa">💆 Beauty & Spa</option>
+                                                            <option value="Meditation & Massage">🧘 Meditation & Massage</option>
+                                                       </optgroup>
                                                   </select>
-                                             <div class="input-icon">
-                                                  <ion-icon name="cut-outline"></ion-icon>
+                                                  <div class="input-icon">
+                                                       <ion-icon name="cut-outline"></ion-icon>
                                                   </div>
                                              </div>
                                         </div>
@@ -344,7 +367,7 @@ $conn->close();
                                                   <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
                                              </div>
                                         </div>
-                                            
+
                                         <button type="submit" class="form-btn" id="submitBtn">
                                              <span class="span">Book Appointment</span>
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -395,10 +418,8 @@ $conn->close();
     - custom js link
   -->
      <script src="./assets/js/script.js" defer></script>
-     <script src="./assets/js/appointment.js" defer></script>
 
-     <!-- 
-    - ionicon link
+     <!--- ionicon link
   -->
      <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
      <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

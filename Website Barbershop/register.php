@@ -1,37 +1,5 @@
 <?php
-require 'function.php'; // koneksi ke database
-
-$success = false;
-$error = "";
-
-if (isset($_POST["register"])) {
-  $username = strtolower(stripslashes($_POST["username"]));
-  $password1 = mysqli_real_escape_string($koneksi, $_POST["password1"]);
-  $password2 = mysqli_real_escape_string($koneksi, $_POST["password2"]);
-
-  // Cek username sudah ada atau belum
-  $result = mysqli_query($koneksi, "SELECT username FROM users WHERE username = '$username'");
-  if (mysqli_fetch_assoc($result)) {
-    $error = "Username sudah terdaftar.";
-  } elseif ($password1 !== $password2) {
-    $error = "Konfirmasi password tidak sesuai.";
-  } else {
-    // Enkripsi password
-    $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
-    // Simpan user baru
-    $query = "INSERT INTO users (username, password) VALUES ('$username', '$passwordHash')";
-    if (mysqli_query($koneksi, $query)) {
-      header("Location: login.php?success=1");
-      exit;
-    } else {
-      $error = "Gagal mendaftar. Silakan coba lagi.";
-    }
-  }
-}
-?>
-
-<?php
-require 'function.php'; // koneksi ke database
+require 'function.php';
 
 $success = false;
 $error = "";
@@ -48,10 +16,21 @@ if (isset($_POST["register"])) {
     $error = "Konfirmasi password tidak sesuai.";
   } else {
     $passwordHash = password_hash($password1, PASSWORD_DEFAULT);
+
     $query = "INSERT INTO users (username, password) VALUES ('$username', '$passwordHash')";
     if (mysqli_query($koneksi, $query)) {
-      header("Location: login.php?success=1");
-      exit;
+      echo "<script>
+        document.addEventListener('DOMContentLoaded', function () {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil Daftar!',
+            text: 'Silakan login sekarang.',
+            confirmButtonColor: '#ffc800'
+          }).then(() => {
+            window.location.href = 'login.php';
+          });
+        });
+      </script>";
     } else {
       $error = "Gagal mendaftar. Silakan coba lagi.";
     }
@@ -65,10 +44,13 @@ if (isset($_POST["register"])) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register Akun - Barber</title>
+  <title>Barber - Barbers & Hair Cutting</title>
+  <meta name="title" content="Barber - Barbers & Hair Cutting">
+  <meta name="description" content="This is a barber html template made by codewithsadee">
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {
       --main-color: #ffe600;
@@ -249,28 +231,35 @@ if (isset($_POST["register"])) {
 </head>
 
 <body data-theme="light">
-  <!-- Particle Background -->
   <div id="particles-js" style="position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%;"></div>
-
   <div id="register-card">
     <button class="mode-toggle" onclick="toggleMode()" id="modeToggle">☀️ Light Mode</button>
     <h2>Register Akun</h2>
 
     <?php if (!empty($error)) : ?>
-      <div class="alert alert-danger"><?= $error ?></div>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal Daftar!',
+            text: '<?= $error ?>',
+            confirmButtonColor: '#ffc800'
+          });
+        });
+      </script>
     <?php endif; ?>
 
-    <form action="" method="post">
+    <form action="" method="post" autocomplete="off">
       <div class="input-group">
-        <input type="text" name="username" id="username" placeholder=" " required>
+        <input type="text" name="username" id="username" placeholder=" " autocomplete="off" required>
         <label for="username">Username</label>
       </div>
       <div class="input-group">
-        <input type="password" name="password1" id="password1" placeholder=" " required>
+        <input type="password" name="password1" id="password1" placeholder=" " autocomplete="new-password" required>
         <label for="password1">Password</label>
       </div>
       <div class="input-group">
-        <input type="password" name="password2" id="password2" placeholder=" " required>
+        <input type="password" name="password2" id="password2" placeholder=" " autocomplete="new-password" required>
         <label for="password2">Konfirmasi Password</label>
       </div>
       <button type="submit" name="register" class="btn-register">Daftar</button>
@@ -281,7 +270,6 @@ if (isset($_POST["register"])) {
     </div>
   </div>
 
-  <!-- GSAP for animation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script>
     window.addEventListener("load", () => {
@@ -293,7 +281,6 @@ if (isset($_POST["register"])) {
       });
     });
 
-    // Theme Toggle with LocalStorage
     const body = document.body;
     const toggle = document.getElementById("modeToggle");
     const savedTheme = localStorage.getItem("theme");
@@ -312,7 +299,6 @@ if (isset($_POST["register"])) {
     }
   </script>
 
-  <!-- Particle.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {

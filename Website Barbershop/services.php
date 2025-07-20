@@ -2,8 +2,8 @@
 
 session_start();
 if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
-  exit;
+     header("Location: login.php");
+     exit;
 }
 
 ?>
@@ -151,7 +151,7 @@ if (!isset($_SESSION['username'])) {
                               <li class="navbar-item">
                                    <a href="contact.php" class="navbar-link" data-nav-link>Contact</a>
                               </li>
-                              
+
                          </ul>
                     </nav>
 

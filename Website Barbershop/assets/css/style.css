@@ -736,6 +736,42 @@ body {
   #APPOINTMENT
 \*-----------------------------------*/
 
+.service-select {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--white_30);
+  background-color: var(--white_10);
+  color: var(--white);
+  max-width: 100%;
+  width: 100%;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5l6 6 6-6H1.5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.service-select option {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.service-select optgroup {
+  color: var(--gold-crayola); /* Sesuaikan dengan tema barber Anda */
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.service-select:focus {
+  outline: none;
+  border-color: var(--gold-crayola);
+  background-color: var(--white_15);
+}
+
 .input-group select.input-field {
   height: 60px;
   padding: 15px 50px 15px 20px;
@@ -768,10 +804,12 @@ select.input-field {
   right: 35px;
 }
 
-select.input-field option {
-  padding: 15px 20px;
-  font-size: 15px; 
-  color: var(--eerie-black-1);
+select.input-field option,
+select.input-field optgroup {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  background-color: var(--eerie-black-1);
+  color: var(--white);
 }
 
 .appoin {

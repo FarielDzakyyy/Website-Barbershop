@@ -1,37 +1,80 @@
 <?php
 session_start();
+require 'function.php';
 
-// Proses login
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $recaptchaSecret = '6LcppogrAAAAAPQoFAG60u_v2_Z1HxGeW50fRGP2';
-    $recaptchaResponse = $_POST['g-recaptcha-response'];
+  $recaptchaSecret = '6LcppogrAAAAAPQoFAG60u_v2_Z1HxGeW50fRGP2';
+  $recaptchaResponse = $_POST['g-recaptcha-response'];
 
-    if (empty($recaptchaResponse)) {
-        echo "<script>alert('Captcha belum dicentang!'); window.location.href='login.php';</script>";
-        exit;
-    }
-
+  if (empty($recaptchaResponse)) {
+    $alert = [
+      'icon' => 'warning',
+      'title' => 'Oops...',
+      'text' => 'Captcha belum dicentang!',
+      'redirect' => 'login.php'
+    ];
+  } else {
     $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptchaSecret}&response={$recaptchaResponse}");
     $captchaSuccess = json_decode($verify);
 
     if (!$captchaSuccess->success) {
-        echo "<script>alert('Verifikasi captcha gagal!'); window.location.href='login.php';</script>";
-        exit;
-    }
-
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    if ($username && $password) {
-        $_SESSION['username'] = $username;
-        header("Location: home.php");
-        exit;
+      $alert = [
+        'icon' => 'error',
+        'title' => 'Captcha Gagal!',
+        'text' => 'Captcha tidak valid!',
+        'redirect' => 'login.php'
+      ];
     } else {
-        echo "<script>alert('Username atau Password salah!'); window.location.href='login.php';</script>";
-        exit;
+      $username = $_POST['username'] ?? '';
+      $password = $_POST['password'] ?? '';
+
+      if ($username && $password) {
+        $stmt = $koneksi->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+          $user = $result->fetch_assoc();
+
+          if (password_verify($password, $user['password'])) {
+            $_SESSION['username'] = $username;
+
+            $alert = [
+              'icon' => 'success',
+              'title' => 'Login Berhasil!',
+              'text' => 'Selamat datang kembali!',
+              'redirect' => 'home.php'
+            ];
+          } else {
+            $alert = [
+              'icon' => 'error',
+              'title' => 'Password Salah!',
+              'text' => 'Silakan coba lagi.',
+              'redirect' => 'login.php'
+            ];
+          }
+        } else {
+          $alert = [
+            'icon' => 'error',
+            'title' => 'Akun Tidak Ditemukan!',
+            'text' => 'Username tidak terdaftar.',
+            'redirect' => 'login.php'
+          ];
+        }
+      } else {
+        $alert = [
+          'icon' => 'warning',
+          'title' => 'Form Kosong!',
+          'text' => 'Harap isi username dan password.',
+          'redirect' => 'login.php'
+        ];
+      }
     }
+  }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="id">
@@ -122,7 +165,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       padding: 14px 14px;
       border-radius: 12px;
       background-color: var(--input-bg);
-      /* pastikan ini digunakan */
       color: var(--text-color);
       background-clip: padding-box;
       border: none;
@@ -241,14 +283,82 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         position: relative;
         z-index: 1;
       }
+
+      /* Fix untuk input username dark/light mode */
+      body.light-mode input[type="text"],
+      body.light-mode input[type="email"],
+      body.light-mode input[type="password"] {
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #ccc;
+      }
+
+      body.dark-mode input[type="text"],
+      body.dark-mode input[type="email"],
+      body.dark-mode input[type="password"] {
+        background-color: #222;
+        color: #fff;
+        border: 1px solid #444;
+      }
+
+      body.dark-mode input::placeholder {
+        color: #aaa;
+      }
+
+      body.light-mode input::placeholder {
+        color: #888;
+      }
+
+      input:-webkit-autofill {
+        transition: background-color 9999s ease-in-out 0s;
+        -webkit-text-fill-color: inherit !important;
+        box-shadow: 0 0 0px 1000px transparent inset !important;
+      }
+
+      /* Autofill untuk dark mode */
+      [data-theme="dark"] input:-webkit-autofill {
+        -webkit-text-fill-color: #fff !important;
+        box-shadow: 0 0 0px 1000px #222 inset !important;
+      }
+
+      /* Autofill untuk light mode */
+      [data-theme="light"] input:-webkit-autofill {
+        -webkit-text-fill-color: #000 !important;
+        box-shadow: 0 0 0px 1000px #fff inset !important;
+      }
+
+      input.auto-fixed {
+        background-color: var(--input-bg) !important;
+        -webkit-text-fill-color: var(--text-color) !important;
+        box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+        transition: none !important;
+      }
+
+
     }
   </style>
 </head>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <body data-theme="light">
   <div class="login-container" id="login-card">
     <button class="mode-toggle" onclick="toggleMode()" id="modeToggle">☀️ Light Mode</button>
     <h2>Login Akun</h2>
+
+    <?php if (isset($alert)) : ?>
+      <script>
+        Swal.fire({
+          icon: '<?= $alert['icon'] ?>',
+          title: '<?= $alert['title'] ?>',
+          text: '<?= $alert['text'] ?>',
+          confirmButtonColor: '#c2a15d'
+        }).then(() => {
+          window.location.href = '<?= $alert['redirect'] ?>';
+        });
+      </script>
+    <?php endif; ?>
+
 
     <?php if (!empty($successMessage)) : ?>
       <div class="alert alert-success"><?= $successMessage ?></div>
@@ -257,19 +367,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="alert alert-danger">Username, Password, atau reCAPTCHA salah!</div>
     <?php endif; ?>
 
-    <form action="" method="POST">
+    <form action="" method="POST" autocomplete="off">
       <div class="input-group">
-        <input type="text" name="username" id="username" placeholder=" " required>
+        <input type="text" name="username" id="username" placeholder=" " autocomplete="off" required>
         <label for="username">Username</label>
       </div>
 
       <div class="input-group">
-        <input type="password" name="password" id="password" placeholder=" " required>
+        <input type="password" name="password" id="password" placeholder=" " autocomplete="new-password" required>
         <label for="password">Password</label>
         <i class="fa fa-eye toggle-password" onclick="togglePassword(this)"></i>
       </div>
 
-        <div class="g-recaptcha" data-sitekey="6LcppogrAAAAAAbsLWlvfrwvAzAJVoMIU29goy3E"></div>
+      <div class="g-recaptcha" data-sitekey="6LcppogrAAAAAAbsLWlvfrwvAzAJVoMIU29goy3E"></div>
 
       <button type="submit" name="login" class="btn-login">Login</button>
     </form>
@@ -282,7 +392,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   <script>
-    
     window.addEventListener("load", () => {
       gsap.to("#login-card", {
         opacity: 1,
@@ -303,6 +412,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       }
     }
 
+    const body = document.body;
+    const toggle = document.getElementById("modeToggle");
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme) {
+      body.setAttribute("data-theme", savedTheme);
+      toggle.innerHTML = savedTheme === "dark" ? "🌙 Dark Mode" : "☀️ Light Mode";
+    }
+
     function toggleMode() {
       const body = document.body;
       const toggle = document.getElementById("modeToggle");
@@ -314,6 +432,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         body.setAttribute("data-theme", "dark");
         toggle.innerHTML = "🌙 Dark Mode";
       }
+
+      const usernameInput = document.getElementById('username');
+      usernameInput.addEventListener('input', () => {
+        localStorage.setItem('lastUsername', usernameInput.value);
+      });
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem('lastUsername');
+        if (saved) {
+          usernameInput.value = saved;
+          usernameInput.dispatchEvent(new Event('input'));
+        }
+      });
     }
   </script>
 

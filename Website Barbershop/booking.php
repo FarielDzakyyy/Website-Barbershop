@@ -1,9 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
-  exit;
+     header("Location: login.php");
+     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +30,7 @@ if (!isset($_SESSION['username'])) {
      <!-- 
     - custom css link
   -->
-     <link rel="stylesheet" href="./assets/css/index.css">
+     <link rel="stylesheet" href="./assets/css/style.css">
 
      <!-- 
     - google font link
@@ -69,7 +70,7 @@ if (!isset($_SESSION['username'])) {
 
                               <p class="item-title">Call Us :</p>
 
-                              <a href="tel:01234567895" class="item-link">012 (345) 67 895</a>
+                              <a href="tel:08816564510" class="item-link">08816564510</a>
                          </li>
 
                          <li class="header-top-item">
@@ -77,27 +78,27 @@ if (!isset($_SESSION['username'])) {
 
                               <p class="item-title">Opening Hour :</p>
 
-                              <p class="item-text">Sunday - Friday, 08 am - 09 pm</p>
+                              <p class="item-text">Monday - Saturday, 09 am - 09 pm</p>
                          </li>
 
                          <li>
                               <ul class="social-list">
 
                                    <li>
-                                        <a href="#" class="social-link">
+                                        <a href="https://www.facebook.com/share/169VN1R3TT/" class="social-link">
                                              <ion-icon name="logo-facebook"></ion-icon>
                                         </a>
                                    </li>
 
                                    <li>
-                                        <a href="#" class="social-link">
-                                             <ion-icon name="logo-twitter"></ion-icon>
+                                        <a href="https://www.instagram.com/farieldzaky?igsh=dWwzeTV5ZGRsMHUx" class="social-link">
+                                             <ion-icon name="logo-instagram"></ion-icon>
                                         </a>
                                    </li>
 
                                    <li>
-                                        <a href="#" class="social-link">
-                                             <ion-icon name="logo-youtube"></ion-icon>
+                                        <a href="https://www.tiktok.com/@farieldzakyyy?_t=ZS-8xgNs3UW0u4&_r=1" class="social-link">
+                                             <ion-icon name="logo-tiktok"></ion-icon>
                                         </a>
                                    </li>
 
@@ -157,7 +158,7 @@ if (!isset($_SESSION['username'])) {
                          <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
                     </button>
 
-                    <a href="#" class="btn has-before">
+                    <a href="appointment.php" class="btn has-before">
                          <span class="span">Appointment</span>
 
                          <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
