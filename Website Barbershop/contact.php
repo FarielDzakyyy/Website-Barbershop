@@ -187,7 +187,7 @@ if (!isset($_SESSION['username'])) {
                               Kami menggabungkan tradisi dengan gaya modern untuk penampilan yang sempurna.
                          </p>
 
-                         <a href="#" class="btn has-before">
+                         <a href="services.php" class="btn has-before">
                               <span class="span">Explore Our Services</span>
 
                               <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -212,18 +212,14 @@ if (!isset($_SESSION['username'])) {
                                         <span class="span">Hair Salon</span>
                                    </a>
 
-                                   <form action="" class="input-wrapper">
-
-                                        <input type="email" name="email_address" placeholder="Enter Your Email" required
-                                             class="email-field">
-
-                                        <button type="submit" class="btn has-before">
-                                             <span class="span">Subscribe Now</span>
-
-                                             <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
-                                        </button>
-
-                                   </form>
+                                   <!-- Google Maps Lokasi Semarang -->
+                                   <div style="margin-top: 20px;">
+                                        <iframe
+                                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63325.838465298905!2d110.37737503065904!3d-7.005145905021973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708b4db2e05d27%3A0x3027a76e352b6e0!2sKota%20Semarang%2C%20Jawa%20Tengah!5e0!3m2!1sid!2sid!4v1721360100015!5m2!1sid!2sid"
+                                             width="900px" height="500px" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy"
+                                             referrerpolicy="no-referrer-when-downgrade">
+                                        </iframe>
+                                   </div>
 
                               </div>
 
@@ -236,23 +232,23 @@ if (!isset($_SESSION['username'])) {
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Our Services</a>
+                                             <a href="services.php" class="footer-link has-before">Our Services</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Meet Our Team</a>
+                                             <a href="team.php" class="footer-link has-before">Meet Our Team</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Our Portfolio</a>
+                                             <a href="http://localhost/Fariel%20Dzaky%20Portofolio/index.html" class="footer-link has-before">Our Portfolio</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Need A Career?</a>
+                                             <a href="https://www.linkedin.com/in/fariel-dzaky?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="footer-link has-before">Need A Career?</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">News & Blog</a>
+                                             <a href="blog.php" class="footer-link has-before">News & Blog</a>
                                         </li>
 
                                    </ul>
@@ -264,23 +260,23 @@ if (!isset($_SESSION['username'])) {
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Hair Cutting</a>
+                                             <a href="services.php" class="footer-link has-before">Hair Cutting</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Shaving & Design</a>
+                                             <a href="services.php" class="footer-link has-before">Hair Washing</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Hair Colors</a>
+                                             <a href="services.php" class="footer-link has-before">Body Treatment</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Beauty & Spa</a>
+                                             <a href="services.php" class="footer-link has-before">Beauty & Spa</a>
                                         </li>
 
                                         <li>
-                                             <a href="#" class="footer-link has-before">Body Massages</a>
+                                             <a href="services.php" class="footer-link has-before">Hair Color</a>
                                         </li>
 
                                    </ul>
@@ -392,7 +388,7 @@ if (!isset($_SESSION['username'])) {
 
                          <div class="footer-bottom">
                               <p class="copyright">
-                                   &copy; 2025 <a href="#" class="copyright-link">Haircur</a>. All Rights
+                                   &copy; 2025 <a href="#" class="copyright-link">Haircut</a>. All Rights
                                    Reserved.
                               </p>
                          </div>

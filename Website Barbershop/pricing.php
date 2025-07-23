@@ -193,7 +193,7 @@ if (!isset($_SESSION['username'])) {
                               Kami menggabungkan tradisi dengan gaya modern untuk penampilan yang sempurna.
                          </p>
 
-                         <a href="#" class="btn has-before">
+                         <a href="services.php" class="btn has-before">
                               <span class="span">Explore Our Services</span>
 
                               <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>

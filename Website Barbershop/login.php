@@ -315,13 +315,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         box-shadow: 0 0 0px 1000px transparent inset !important;
       }
 
-      /* Autofill untuk dark mode */
       [data-theme="dark"] input:-webkit-autofill {
         -webkit-text-fill-color: #fff !important;
         box-shadow: 0 0 0px 1000px #222 inset !important;
       }
 
-      /* Autofill untuk light mode */
       [data-theme="light"] input:-webkit-autofill {
         -webkit-text-fill-color: #000 !important;
         box-shadow: 0 0 0px 1000px #fff inset !important;

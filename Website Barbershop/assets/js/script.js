@@ -1,69 +1,48 @@
 "use strict";
 
-// Jalankan hanya di appointment.php
 document.addEventListener("DOMContentLoaded", function () {
   if (!window.location.pathname.includes("appointment.php")) return;
 
-  const appointmentForm = document.getElementById("appointmentForm");
+  const form = document.getElementById("appointmentForm");
   const submitBtn = document.getElementById("submitBtn");
 
-  appointmentForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+  const name = document.getElementById("nameInput");
+  const email = document.getElementById("emailInput");
+  const phone = document.getElementById("phoneInput");
+  const service = document.getElementById("serviceSelect");
+  const date = document.getElementById("dateInput");
+  const time = document.getElementById("timeInput");
 
-    const nameInput = document.getElementById("nameInput");
-    const emailInput = document.getElementById("emailInput");
-    const phoneInput = document.getElementById("phoneInput");
-    const serviceSelect = document.getElementById("serviceSelect");
-    const dateInput = document.getElementById("dateInput");
-    const timeInput = document.getElementById("timeInput");
+  if (!form || !submitBtn || !name || !email || !phone || !service || !date || !time) return;
 
+  const resetBorder = (element) => element.style.borderColor = "";
+
+  const validateForm = () => {
     let isValid = true;
 
-    // Validasi manual
-    if (nameInput.value.trim() === "") {
-      nameInput.style.borderColor = "#e74c3c";
-      isValid = false;
-    } else {
-      nameInput.style.borderColor = "";
-    }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailInput.value.trim())) {
-      emailInput.style.borderColor = "#e74c3c";
-      isValid = false;
-    } else {
-      emailInput.style.borderColor = "";
-    }
 
-    if (phoneInput.value.trim().length < 8) {
-      phoneInput.style.borderColor = "#e74c3c";
-      isValid = false;
-    } else {
-      phoneInput.style.borderColor = "";
-    }
+    const fields = [
+      { el: name, valid: name.value.trim() !== "" },
+      { el: email, valid: emailRegex.test(email.value.trim()) },
+      { el: phone, valid: phone.value.trim().length >= 8 },
+      { el: service, valid: service.value !== "" },
+      { el: date, valid: date.value !== "" },
+      { el: time, valid: time.value !== "" }
+    ];
 
-    if (serviceSelect.value === "") {
-      serviceSelect.style.borderColor = "#e74c3c";
-      isValid = false;
-    } else {
-      serviceSelect.style.borderColor = "";
-    }
+    fields.forEach(({ el, valid }) => {
+      el.style.borderColor = valid ? "" : "#e74c3c";
+      if (!valid) isValid = false;
+    });
 
-    if (dateInput.value === "") {
-      dateInput.style.borderColor = "#e74c3c";
-      isValid = false;
-    } else {
-      dateInput.style.borderColor = "";
-    }
+    return isValid;
+  };
 
-    if (timeInput.value === "") {
-      timeInput.style.borderColor = "#e74c3c";
-      isValid = false;
-    } else {
-      timeInput.style.borderColor = "";
-    }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    if (!isValid) {
+    if (!validateForm()) {
       Swal.fire({
         icon: 'error',
         title: 'Form tidak valid',
@@ -73,92 +52,96 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Proses kirim form dengan SweetAlert loading
     Swal.fire({
       title: 'Memproses...',
       text: 'Mohon tunggu sebentar',
-      didOpen: () => {
-        Swal.showLoading();
-      },
-      allowOutsideClick: false
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
     });
 
-    // Submit pakai AJAX ke appointment.php
-    const formData = new FormData(appointmentForm);
+    const formData = new FormData(form);
+
     fetch("appointment.php", {
       method: "POST",
       body: formData
     })
-      .then((response) => response.text())
-      .then((res) => {
-        Swal.close();
-        if (res.includes("Appointment berhasil")) {
-          Swal.fire({
-            icon: "success",
-            title: "Sukses!",
-            text: "Appointment berhasil dibuat.",
-            confirmButtonColor: "#28a745"
-          }).then(() => {
-            window.location.href = "booking.php";
-          });
-        } else if (res.includes("sudah dipesan")) {
-          Swal.fire({
-            icon: "warning",
-            title: "Jadwal Penuh",
-            text: "Waktu tersebut sudah dipesan. Pilih waktu lain.",
-            confirmButtonColor: "#ffc800"
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Gagal",
-            text: "Terjadi kesalahan. Silakan coba lagi.",
-            confirmButtonColor: "#dc3545"
-          });
-        }
-      })
-      .catch((err) => {
-        Swal.close();
+    .then(res => res.text())
+    .then(res => {
+      Swal.close();
+
+      if (res.includes("Appointment berhasil")) {
+        Swal.fire({
+          icon: "success",
+          title: "Sukses!",
+          text: "Appointment berhasil dibuat.",
+          confirmButtonColor: "#28a745"
+        }).then(() => window.location.href = "booking.php");
+
+      } else if (res.includes("Jadwal Tidak Tersedia")) {
+        const htmlMsg = res.split("html: '")[1]?.split("',")[0] || "Slot waktu sudah penuh.";
+        Swal.fire({
+          icon: "warning",
+          title: "Jadwal Tidak Tersedia",
+          html: htmlMsg,
+          confirmButtonColor: "#ffc800"
+        });
+
+      } else if (res.includes("Form tidak lengkap")) {
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: "Gagal terhubung ke server.",
+          title: "Form tidak lengkap!",
+          text: "Semua field wajib diisi.",
+          confirmButtonColor: "#ffc800"
+        });
+
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Terjadi kesalahan. Silakan coba lagi.",
           confirmButtonColor: "#dc3545"
         });
-        console.error(err);
+      }
+    })
+    .catch(() => {
+      Swal.close();
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Gagal terhubung ke server.",
+        confirmButtonColor: "#dc3545"
       });
-  });
-
-  // Styling & animasi field
-  const inputs = document.querySelectorAll(".input-field");
-  inputs.forEach((input) => {
-    input.addEventListener("input", function () {
-      this.style.borderColor = "";
     });
   });
 
-  document.getElementById("serviceSelect").addEventListener("change", function () {
+  // Reset border saat input
+  document.querySelectorAll(".input-field").forEach(input => {
+    input.addEventListener("input", () => resetBorder(input));
+  });
+
+  // Warna select
+  service.addEventListener("change", function () {
     this.style.color = this.value !== "" ? "var(--white)" : "var(--white_50)";
   });
 
+  // Minimal tanggal hari ini
   const today = new Date().toISOString().split("T")[0];
-  document.getElementById("dateInput").setAttribute("min", today);
+  date.setAttribute("min", today);
 
-  document.getElementById("timeInput").addEventListener("focus", function () {
+  // Batas jam input
+  time.addEventListener("focus", function () {
     this.setAttribute("min", "09:00");
     this.setAttribute("max", "21:00");
   });
 
-  // Animasi form
-  const formElements = document.querySelectorAll(".input-group, .form-btn");
-  formElements.forEach((element, index) => {
-    element.style.opacity = "0";
-    element.style.transform = "translateY(20px)";
-    element.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
-
+  // Animasi masuk
+  document.querySelectorAll(".input-group, .form-btn").forEach((el, i) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(20px)";
+    el.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
     setTimeout(() => {
-      element.style.opacity = "1";
-      element.style.transform = "translateY(0)";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
     }, 100);
   });
 });

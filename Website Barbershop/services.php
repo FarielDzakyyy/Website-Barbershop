@@ -193,7 +193,7 @@ if (!isset($_SESSION['username'])) {
                               Kami menggabungkan tradisi dengan gaya modern untuk penampilan yang sempurna.
                          </p>
 
-                         <a href="#" class="btn has-before">
+                         <a href="services.php" class="btn has-before">
                               <span class="span">Explore Our Services</span>
 
                               <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -230,7 +230,7 @@ if (!isset($_SESSION['username'])) {
                                         </div>
 
                                         <h3 class="h3">
-                                             <a href="#" class="card-title">Hair Cutting Style</a>
+                                             <a href="HCS.php" class="card-title">Hair Cutting Style</a>
                                         </h3>
 
                                         <p class="card-text">
@@ -238,7 +238,7 @@ if (!isset($_SESSION['username'])) {
                                              kami! Kami akan bantu wujudkan potongan rambut impianmu yang paling pas.
                                         </p>
 
-                                        <a href="#" class="card-btn" aria-label="more">
+                                        <a href="HCS.php" class="card-btn" aria-label="more">
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </a>
 
@@ -253,7 +253,7 @@ if (!isset($_SESSION['username'])) {
                                         </div>
 
                                         <h3 class="h3">
-                                             <a href="#" class="card-title">Hair Washing</a>
+                                             <a href="HW.php" class="card-title">Hair Washing</a>
                                         </h3>
 
                                         <p class="card-text">
@@ -261,7 +261,7 @@ if (!isset($_SESSION['username'])) {
                                              sebelum setiap potongan. Kesegaran yang nyata, gaya yang tak terlupakan.
                                         </p>
 
-                                        <a href="#" class="card-btn" aria-label="more">
+                                        <a href="HW.php" class="card-btn" aria-label="more">
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </a>
 
@@ -276,7 +276,7 @@ if (!isset($_SESSION['username'])) {
                                         </div>
 
                                         <h3 class="h3">
-                                             <a href="#" class="card-title">Body Treatments</a>
+                                             <a href="BT.php" class="card-title">Body Treatments</a>
                                         </h3>
 
                                         <p class="card-text">
@@ -285,7 +285,7 @@ if (!isset($_SESSION['username'])) {
                                              menyeimbangkan pikiran.
                                         </p>
 
-                                        <a href="#" class="card-btn" aria-label="more">
+                                        <a href="BT.php" class="card-btn" aria-label="more">
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </a>
 
@@ -300,7 +300,7 @@ if (!isset($_SESSION['username'])) {
                                         </div>
 
                                         <h3 class="h3">
-                                             <a href="#" class="card-title">Beauty & Spa</a>
+                                             <a href="BS.php" class="card-title">Beauty & Spa</a>
                                         </h3>
 
                                         <p class="card-text">
@@ -309,7 +309,7 @@ if (!isset($_SESSION['username'])) {
                                              Waktunya untuk Anda bersinar. Pesan perawatan Anda sekarang!
                                         </p>
 
-                                        <a href="#" class="card-btn" aria-label="more">
+                                        <a href="BS.php" class="card-btn" aria-label="more">
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </a>
 
@@ -324,7 +324,7 @@ if (!isset($_SESSION['username'])) {
                                         </div>
 
                                         <h3 class="h3">
-                                             <a href="#" class="card-title">Stylist Shaving</a>
+                                             <a href="SS.php" class="card-title">Stylist Shaving</a>
                                         </h3>
 
                                         <p class="card-text">
@@ -334,7 +334,7 @@ if (!isset($_SESSION['username'])) {
                                              lebih tajam?
                                         </p>
 
-                                        <a href="#" class="card-btn" aria-label="more">
+                                        <a href="SS.php" class="card-btn" aria-label="more">
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </a>
 
@@ -349,7 +349,7 @@ if (!isset($_SESSION['username'])) {
                                         </div>
 
                                         <h3 class="h3">
-                                             <a href="#" class="card-title">Multi Hair Colors</a>
+                                             <a href="MHC.php" class="card-title">Multi Hair Colors</a>
                                         </h3>
 
                                         <p class="card-text">
@@ -358,7 +358,7 @@ if (!isset($_SESSION['username'])) {
                                              merefleksikan kepribadianmu. Kami siap wujudkan rambut impianmu.
                                         </p>
 
-                                        <a href="#" class="card-btn" aria-label="more">
+                                        <a href="MHC.php" class="card-btn" aria-label="more">
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </a>
 

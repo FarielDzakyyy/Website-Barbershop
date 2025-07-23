@@ -1,67 +1,79 @@
 <?php
-
 session_start();
+require 'function.php';
+
 if (!isset($_SESSION['username'])) {
      header("Location: login.php");
      exit;
 }
 
-require 'function.php'; // koneksi harus ada di file ini
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+     $name = trim($_POST['name'] ?? '');
+     $email = trim($_POST['email_address'] ?? '');
+     $phone = trim($_POST['phone'] ?? '');
+     $category = trim($_POST['category'] ?? '');
+     $date = trim($_POST['date'] ?? '');
+     $time = trim($_POST['time'] ?? '');
+     $message = trim($_POST['message'] ?? '');
 
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit;
-}
+     if (!$name || !$email || !$phone || !$date || !$time) {
+          echo "Form tidak lengkap!";
+          exit;
+     }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari form
-    $name = $_POST['name'] ?? '';
-    $email = $_POST['email_address'] ?? '';
-    $phone = $_POST['phone'] ?? '';
-    $category = $_POST['category'] ?? '';
-    $date = $_POST['date'] ?? '';
-    $time = $_POST['time'] ?? '';
-    $message = $_POST['message'] ?? '';
+     try {
+          $requested_datetime_str = "$date $time";
+          $requested_timestamp = strtotime($requested_datetime_str);
 
-    // Validasi dasar
-    if (empty($name) || empty($email) || empty($phone) || empty($date) || empty($time)) {
-        echo "<script>alert('Semua field wajib diisi!'); window.location.href='appointment.php';</script>";
-        exit;
-    }
+          $start = date('Y-m-d H:i:s', $requested_timestamp - 40 * 60);
+          $end   = date('Y-m-d H:i:s', $requested_timestamp + 40 * 60);
 
-    try {
+          $cekSql = "SELECT * FROM appointments 
+                   WHERE date = ? AND (
+                        (STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s') BETWEEN ? AND ?)
+                        OR (DATE_ADD(STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s'), INTERVAL 40 MINUTE) BETWEEN ? AND ?)
+                        OR (? BETWEEN STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s') AND DATE_ADD(STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s'), INTERVAL 40 MINUTE))
+                   )";
 
-        $cekSql = "SELECT * FROM appointments WHERE date = ? AND time = ?";
-        $cekStmt = $koneksi->prepare($cekSql);
-        $cekStmt->bind_param("ss", $date, $time);
-        $cekStmt->execute();
-        $result = $cekStmt->get_result();
+          $cekStmt = $koneksi->prepare($cekSql);
+          $cekStmt->bind_param("ssssss", $date, $start, $end, $start, $end, $requested_datetime_str);
+          $cekStmt->execute();
+          $result = $cekStmt->get_result();
 
-        if ($result->num_rows > 0) {
-            echo "<script>alert('Maaf, waktu tersebut sudah dipesan. Silakan pilih waktu lain.'); window.location.href='appointment.php';</script>";
-            exit;
-        } else {
+          if ($result->num_rows > 0) {
+               $conflict = $result->fetch_assoc();
+               $conflictTime = date('H:i', strtotime($conflict['time']));
+               $conflictName = htmlspecialchars($conflict['name']);
+               $nextAvailable = date('H:i', $requested_timestamp + 40 * 60);
+               $userRequest = date('H:i', $requested_timestamp);
 
-            $sql = "INSERT INTO appointments (name, email_address, phone, category, date, time, message) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $koneksi->prepare($sql);
-            $stmt->bind_param("sssssss", $name, $email, $phone, $category, $date, $time, $message);
+               $messageHTML = "
+            html: '<div style=\"text-align:left;font-size:0.95rem;\">
+                     <p><b>Waktu dipilih:</b> $userRequest</p>
+                     <p><b>Konflik:</b> Booking atas nama <b>$conflictName</b> pada pukul <b>$conflictTime</b> (durasi 40 menit).</p>
+                     <p style=\"margin-top:10px;\">Disarankan pilih waktu setelah <b>$nextAvailable</b>.</p>
+                     <p style=\"color:#999;font-size:0.85em;margin-top:10px;\">* Jeda waktu disarankan agar tidak bentrok.</p>
+                   </div>";
+               echo "Jadwal Tidak Tersedia! $messageHTML";
+               exit;
+          }
 
-            if ($stmt->execute()) {
-                echo "<script>alert('Appointment berhasil dibuat!'); window.location.href='booking.php';</script>";
-            } else {
-                echo "<script>alert('Gagal insert: " . $stmt->error . "'); window.location.href='gagal.php';</script>";
-            }
+          $stmt = $koneksi->prepare("INSERT INTO appointments (name, email_address, phone, category, date, time, message) VALUES (?, ?, ?, ?, ?, ?, ?)");
+          $stmt->bind_param("sssssss", $name, $email, $phone, $category, $date, $time, $message);
 
-            $stmt->close();
-        }
+          if ($stmt->execute()) {
+               echo "Appointment berhasil";
+          } else {
+               echo "Terjadi kesalahan saat menyimpan appointment";
+          }
 
-        $cekStmt->close();
-    } catch (Exception $e) {
-        echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
-    }
+          $stmt->close();
+          $cekStmt->close();
+     } catch (Exception $e) {
+          echo "Terjadi kesalahan server: " . $e->getMessage();
+     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -245,7 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                               Kami menggabungkan tradisi dengan gaya modern untuk penampilan yang sempurna.
                          </p>
 
-                         <a href="#" class="btn has-before">
+                         <a href="services.php" class="btn has-before">
                               <span class="span">Explore Our Services</span>
 
                               <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -369,7 +381,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
 
                                         <button type="submit" class="form-btn" id="submitBtn">
-                                             <span class="span">Book Appointment</span>
+                                             <span class="span">Appointment Now</span>
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </button>
 
@@ -381,6 +393,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <div id="formError" class="form-error-message">
                                              <ion-icon name="alert-circle" class="error-icon"></ion-icon>
                                              <p>Please fill in all required fields correctly.</p>
+                                        </div>
+
+                                        <hr style="margin: 2rem 0; border: 1px solid #ccc;">
+
+                                        <div style="text-align: center; margin-top: 40px;">
+
+                                             <hr style="margin: 2rem auto; border: 1px solid #ccc; width: 60%;">
+
+                                             <h3 style="margin-bottom: 25px;">Metode Pembayaran via Bank</h3>
+
+                                             <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+
+                                                  <!-- BCA -->
+                                                  <div style="width: 220px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; overflow: hidden; text-align: center;">
+                                                       <div style="width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; background-color: white;">
+                                                            <img src="assets/images/bca.jpeg" alt="Bank BCA" style="background-color: white; padding: 10px; max-width: 100%; max-height: 100%;">
+                                                       </div>
+                                                       <div style="padding: 15px;">
+                                                            <p style="color: #000;"><strong>Bank BCA</strong><br>4040189705<br>Fariel Dzaky</p>
+                                                       </div>
+                                                  </div>
+
+                                                  <!-- BNI -->
+                                                  <div style="width: 220px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; overflow: hidden; text-align: center;">
+                                                       <div style="width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; background-color: white;">
+                                                            <img src="assets/images/bni.jpeg" alt="Bank BNI" style="max-width: 100%; max-height: 100%;">
+                                                       </div>
+                                                       <div style="padding: 15px;">
+                                                            <p style="color: #000;"><strong>Bank BNI</strong><br>1791137152<br>Fariel Dzaky</p>
+                                                       </div>
+                                                  </div>
+
+                                             </div>
+
+                                             <small style="display: block; margin-top: 15px; color: cyan;">
+                                                  * Silakan transfer ke salah satu rekening di atas dan tunjukkan bukti pembayaran saat datang ke barbershop.
+                                             </small>
+
                                         </div>
 
                                    </form>
