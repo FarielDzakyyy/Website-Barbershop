@@ -50,6 +50,16 @@ if (!isset($_SESSION['username'])) {
   -->
      <link rel="preload" as="image" href="./assets/images/hero-banner.jpg">
 
+    <style>
+
+    .back-top-btn {
+    right: auto;
+    left: 20px;
+    bottom: 20px;
+    }
+    
+    </style>
+
 </head>
 
 <body id="top">
@@ -103,7 +113,7 @@ if (!isset($_SESSION['username'])) {
                                    </li>
 
                                    <li>
-                                        <a href="#" class="social-link">
+                                        <a href="contact.php" class="social-link">
                                              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
                                         </a>
                                    </li>
@@ -188,7 +198,7 @@ if (!isset($_SESSION['username'])) {
                               Kami menggabungkan tradisi dengan gaya modern untuk penampilan yang sempurna.
                          </p>
 
-                         <a href="#" class="btn has-before">
+                         <a href="services.php" class="btn has-before">
                               <span class="span">Explore Our Services</span>
 
                               <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -219,7 +229,7 @@ if (!isset($_SESSION['username'])) {
                                    </p>
                               </div>
 
-                              <a href="#" class="btn has-before">
+                              <a href="gallery.php" class="btn has-before">
                                    <span class="span">Explore More Gallery</span>
 
                                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -243,7 +253,7 @@ if (!isset($_SESSION['username'])) {
 
                                              <p class="card-text">Barbers & Salon Services</p>
 
-                                             <a href="#" class="card-btn" aria-label="Read more">
+                                             <a href="assets/images/gallery-1.jpg" class="card-btn" aria-label="Read more">
                                                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                              </a>
 
@@ -266,7 +276,7 @@ if (!isset($_SESSION['username'])) {
 
                                              <p class="card-text">Barbers & Salon Services</p>
 
-                                             <a href="#" class="card-btn" aria-label="Read more">
+                                             <a href="assets/images/gallery-2.jpg" class="card-btn" aria-label="Read more">
                                                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                              </a>
 
@@ -289,7 +299,7 @@ if (!isset($_SESSION['username'])) {
 
                                              <p class="card-text">Barbers & Salon Services</p>
 
-                                             <a href="#" class="card-btn" aria-label="Read more">
+                                             <a href="assets/images/gallery-3.jpg" class="card-btn" aria-label="Read more">
                                                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                              </a>
 
@@ -312,7 +322,467 @@ if (!isset($_SESSION['username'])) {
 
                                              <p class="card-text">Barbers & Salon Services</p>
 
-                                             <a href="#" class="card-btn" aria-label="Read more">
+                                             <a href="assets/images/gallery-4.jpg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hw1.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Washing</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hw1.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hw2.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Washing</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hw2.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hw3.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Washing</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hw3.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hw4.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Washing</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hw4.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bt1.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Body Treatments</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bt1.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bt2.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Body Treatments</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bt2.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bt3.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Body Treatments</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bt3.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bt4.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Body Treatments</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bt4.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bs1.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Beauty & Spa</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bs1.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bs2.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Beauty & Spa</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bs2.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bs3.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Beauty & Spa</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bs3.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/bs4.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Beauty & Spa</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/bs4.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/ss1.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Stylist Shaving</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/ss1.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/ss2.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Stylist Shaving</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/ss2.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/ss3.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Stylist Shaving</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/ss3.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/ss4.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Stylist Shaving</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/ss4.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hc1.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Color</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hc1.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hc2.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Color</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hc2.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hc3.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Color</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hc3.jpeg" class="card-btn" aria-label="Read more">
+                                                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                             </a>
+
+                                        </div>
+
+                                   </div>
+                              </li>
+
+                              <li>
+                                   <div class="gallery-card">
+
+                                        <figure class="card-banner img-holder" style="--width: 422; --height: 550;">
+                                             <img src="./assets/images/hc4.jpeg" width="422" height="550"
+                                                  loading="lazy" alt="Hair Cutting" class="img-cover">
+                                        </figure>
+
+                                        <div class="card-content">
+
+                                             <h3 class="h3 card-title">Hair Color</h3>
+
+                                             <p class="card-text">Barbers & Salon Services</p>
+
+                                             <a href="assets/images/hc4.jpeg" class="card-btn" aria-label="Read more">
                                                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                              </a>
 
@@ -350,6 +820,10 @@ if (!isset($_SESSION['username'])) {
   -->
                <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
                <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+     <script>
+      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="Zpw1BAFcD--FIB0BTZ5gq";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+     </script>
 
 </body>
 

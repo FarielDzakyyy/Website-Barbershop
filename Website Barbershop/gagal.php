@@ -30,7 +30,7 @@ if (!isset($_SESSION['username'])) {
      <!-- 
     - custom css link
   -->
-     <link rel="stylesheet" href="./assets/css/style.css">
+     <link rel="stylesheet" href="./assets/css/gagal.css">
 
      <!-- 
     - google font link

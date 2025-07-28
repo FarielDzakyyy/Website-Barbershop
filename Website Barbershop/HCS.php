@@ -277,9 +277,6 @@ if (!isset($_SESSION['username'])) {
     <a href="services.php" class="btn-back">← Kembali ke Layanan</a>
   </div>
 
-  <div class="footer">
-    &copy; 2025 Haircut Barbershop. All rights reserved.
-  </div>
 </body>
 
 </html>

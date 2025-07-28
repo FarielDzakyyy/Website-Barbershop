@@ -1,77 +1,8 @@
 <?php
 session_start();
-require 'function.php';
-
 if (!isset($_SESSION['username'])) {
-     header("Location: login.php");
-     exit;
-}
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-     $name = trim($_POST['name'] ?? '');
-     $email = trim($_POST['email_address'] ?? '');
-     $phone = trim($_POST['phone'] ?? '');
-     $category = trim($_POST['category'] ?? '');
-     $date = trim($_POST['date'] ?? '');
-     $time = trim($_POST['time'] ?? '');
-     $message = trim($_POST['message'] ?? '');
-
-     if (!$name || !$email || !$phone || !$date || !$time) {
-          echo "Form tidak lengkap!";
-          exit;
-     }
-
-     try {
-          $requested_datetime_str = "$date $time";
-          $requested_timestamp = strtotime($requested_datetime_str);
-
-          $start = date('Y-m-d H:i:s', $requested_timestamp - 40 * 60);
-          $end   = date('Y-m-d H:i:s', $requested_timestamp + 40 * 60);
-
-          $cekSql = "SELECT * FROM appointments 
-                   WHERE date = ? AND (
-                        (STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s') BETWEEN ? AND ?)
-                        OR (DATE_ADD(STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s'), INTERVAL 40 MINUTE) BETWEEN ? AND ?)
-                        OR (? BETWEEN STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s') AND DATE_ADD(STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s'), INTERVAL 40 MINUTE))
-                   )";
-
-          $cekStmt = $koneksi->prepare($cekSql);
-          $cekStmt->bind_param("ssssss", $date, $start, $end, $start, $end, $requested_datetime_str);
-          $cekStmt->execute();
-          $result = $cekStmt->get_result();
-
-          if ($result->num_rows > 0) {
-               $conflict = $result->fetch_assoc();
-               $conflictTime = date('H:i', strtotime($conflict['time']));
-               $conflictName = htmlspecialchars($conflict['name']);
-               $nextAvailable = date('H:i', $requested_timestamp + 40 * 60);
-               $userRequest = date('H:i', $requested_timestamp);
-
-               $messageHTML = "
-            html: '<div style=\"text-align:left;font-size:0.95rem;\">
-                     <p><b>Waktu dipilih:</b> $userRequest</p>
-                     <p><b>Konflik:</b> Booking atas nama <b>$conflictName</b> pada pukul <b>$conflictTime</b> (durasi 40 menit).</p>
-                     <p style=\"margin-top:10px;\">Disarankan pilih waktu setelah <b>$nextAvailable</b>.</p>
-                     <p style=\"color:#999;font-size:0.85em;margin-top:10px;\">* Jeda waktu disarankan agar tidak bentrok.</p>
-                   </div>";
-               echo "Jadwal Tidak Tersedia! $messageHTML";
-               exit;
-          }
-
-          $stmt = $koneksi->prepare("INSERT INTO appointments (name, email_address, phone, category, date, time, message) VALUES (?, ?, ?, ?, ?, ?, ?)");
-          $stmt->bind_param("sssssss", $name, $email, $phone, $category, $date, $time, $message);
-
-          if ($stmt->execute()) {
-               echo "Appointment berhasil";
-          } else {
-               echo "Terjadi kesalahan saat menyimpan appointment";
-          }
-
-          $stmt->close();
-          $cekStmt->close();
-     } catch (Exception $e) {
-          echo "Terjadi kesalahan server: " . $e->getMessage();
-     }
+  header("Location: login.php");
+  exit;
 }
 ?>
 
@@ -118,6 +49,69 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     - preload images
   -->
      <link rel="preload" as="image" href="./assets/images/hero-banner.jpg">
+
+     <style>
+
+     .back-top-btn {
+     right: auto;
+     left: 20px;
+     bottom: 20px;
+     }
+
+     .form-btn {
+     position: relative;
+     overflow: hidden;
+     background-color: #000000; /* Hitam */
+     color: #ffffff; /* Putih */
+     border: none;
+     padding: 15px 30px;
+     border-radius: 5px;
+     font-weight: bold;
+     cursor: pointer;
+     transition: background-color 0.4s ease, color 0.4s ease;
+     display: inline-flex;
+     align-items: center;
+     gap: 10px;
+     }
+
+     /* Efek kilatan emas */
+     .form-btn::before {
+     content: "";
+     position: absolute;
+     top: 0;
+     left: -75%;
+     width: 50%;
+     height: 100%;
+     background: linear-gradient(
+     120deg,
+     rgba(255, 215, 0, 0) 0%,
+     rgba(255, 215, 0, 0.6) 50%,
+     rgba(255, 215, 0, 0) 100%
+     );
+     transform: skewX(-25deg);
+     pointer-events: none;
+     }
+
+     /* Hover effect */
+     .form-btn:hover {
+     background-color: darkorchid; /* Ungu */
+     color: #FFD700; /* Teks emas saat hover */
+     }
+
+     .form-btn:hover::before {
+     animation: goldShine 0.8s ease forwards;
+     }
+
+     @keyframes goldShine {
+     0% {
+     left: -75%;
+     }
+     100% {
+     left: 125%;
+     }
+     }
+
+     </style>
 
 </head>
 
@@ -289,111 +283,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                         kami. Cepat, mudah, dan pastikan tempat Anda!
                                    </p>
 
-                                   <form id="appointmentForm" action="appointment.php" method="POST" class="appoin-form">
+                                   <form id="appointmentForm" action="appointments.php" method="POST" class="appoin-form">
 
-                                        <div class="input-wrapper">
-                                             <div class="input-group">
-                                                  <input type="text" name="name" placeholder="Your Full Name" required
-                                                       class="input-field" id="nameInput">
-                                                  <div class="input-icon">
-                                                       <ion-icon name="person-outline"></ion-icon>
-                                                  </div>
-                                             </div>
+                                                                                <div class="input-wrapper">
+                                             <input type="text" name="name" placeholder="Your Full Name" required
+                                                  class="input-field">
 
-                                             <div class="input-group">
-                                                  <input type="email" name="email_address" placeholder="Email Address"
-                                                       required class="input-field" id="emailInput">
-                                                  <div class="input-icon">
-                                                       <ion-icon name="mail-outline"></ion-icon>
-                                                  </div>
-                                             </div>
+                                             <input type="email" name="email_address" placeholder="Email Address"
+                                                  required class="input-field">
                                         </div>
 
                                         <div class="input-wrapper">
-                                             <div class="input-group">
-                                                  <input type="text" name="phone" placeholder="Phone Number" required
-                                                       class="input-field" id="phoneInput">
-                                                  <div class="input-icon">
-                                                       <ion-icon name="call-outline"></ion-icon>
-                                                  </div>
-                                             </div>
+                                             <input type="text" name="phone" placeholder="Phone Number" required
+                                                  class="input-field">
 
-                                             <div class="input-group">
-                                                  <select name="category" class="input-field" id="serviceSelect" required>
-                                                       <option value="" disabled selected>Select service</option>
+                                             <select name="category" class="input-field">
 
-                                                       <!-- Hair Services -->
-                                                       <optgroup label="Hair Services">
-                                                            <option value="Hair Cutting Style">💇 Hair Cutting Style</option>
-                                                            <option value="Hair Cutting & Fitting">💈 Hair Cutting & Fitting</option>
-                                                            <option value="Hair Washing">🧴 Hair Washing</option>
-                                                            <option value="Hair Color & Wash">🎨 Hair Color & Wash</option>
-                                                            <option value="Multi Hair Colors">🌈 Multi Hair Colors</option>
-                                                       </optgroup>
+                                                  <option value="Select category">Select category</option>
+                                                  <option value="Hair Cutting">Hair Cutting</option>
+                                                  <option value="Hair Washing">Hair Washing</option>
+                                                  <option value="Body Treatments">Body Treatments</option>
+                                                  <option value="Beauty & Spa">Beauty & Spa</option>
+                                                  <option value="Stylist Shaving">Stylist Shaving</option>
+                                                  <option value="Hair Color">Hair Color</option>
 
-                                                       <!-- Facial Treatments -->
-                                                       <optgroup label="Facial Treatments">
-                                                            <option value="Facial & Face Wash">🧖 Facial & Face Wash</option>
-                                                            <option value="Shaving & Facial">✂️ Shaving & Facial</option>
-                                                            <option value="Stylist Shaving">🪒 Stylist Shaving</option>
-                                                       </optgroup>
-
-                                                       <!-- Body Treatments -->
-                                                       <optgroup label="Body Treatments">
-                                                            <option value="Body Massage">💪 Body Massage</option>
-                                                            <option value="Backbone Massage">🦴 Backbone Massage</option>
-                                                       </optgroup>
-
-                                                       <!-- Wellness -->
-                                                       <optgroup label="Wellness">
-                                                            <option value="Beauty & Spa">💆 Beauty & Spa</option>
-                                                            <option value="Meditation & Massage">🧘 Meditation & Massage</option>
-                                                       </optgroup>
-                                                  </select>
-                                                  <div class="input-icon">
-                                                       <ion-icon name="cut-outline"></ion-icon>
-                                                  </div>
-                                             </div>
+                                             </select>
                                         </div>
 
-                                        <div class="input-wrapper">
-                                             <div class="input-group">
-                                                  <input type="date" name="date" required class="input-field date" id="dateInput">
-                                                  <div class="input-icon">
-                                                       <ion-icon name="calendar-outline"></ion-icon>
-                                                  </div>
-                                             </div>
+                                        <input type="date" name="date" required class="input-field date">
 
-                                             <div class="input-group">
-                                                  <input type="time" name="time" required class="input-field" id="timeInput">
-                                                  <div class="input-icon">
-                                                       <ion-icon name="time-outline"></ion-icon>
-                                                  </div>
-                                             </div>
-                                        </div>
+                                        <input type="time" name="time" required class="input-field">
 
-                                        <div class="input-group">
-                                             <textarea name="message" placeholder="Write Message (Optional)"
-                                                  class="input-field" id="messageInput"></textarea>
-                                             <div class="input-icon">
-                                                  <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                                             </div>
-                                        </div>
-
-                                        <button type="submit" class="form-btn" id="submitBtn">
+                                        <textarea name="message" placeholder="Write Message" required
+                                             class="input-field"></textarea>
+                                            
+                                        <button type="submit" class="form-btn">
                                              <span class="span">Appointment Now</span>
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                                         </button>
-
-                                        <div id="formSuccess" class="form-success-message">
-                                             <ion-icon name="checkmark-circle" class="success-icon"></ion-icon>
-                                             <p>Your appointment has been booked successfully!</p>
-                                        </div>
-
-                                        <div id="formError" class="form-error-message">
-                                             <ion-icon name="alert-circle" class="error-icon"></ion-icon>
-                                             <p>Please fill in all required fields correctly.</p>
-                                        </div>
 
                                         <hr style="margin: 2rem 0; border: 1px solid #ccc;">
 
@@ -473,6 +400,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   -->
      <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
      <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+     <script>
+      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="Zpw1BAFcD--FIB0BTZ5gq";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+     </script>
 
 </body>
 

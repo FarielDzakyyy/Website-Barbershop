@@ -1,14 +1,11 @@
-CREATE DATABASE barber;
-
-USE barber;
-
-CREATE TABLE appointments (
+CREATE TABLE IF NOT EXISTS appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    email_address VARCHAR(100),
-    phone VARCHAR(20),
-    category VARCHAR(50),
-    date DATE,
+    name VARCHAR(100) NOT NULL,
+    email_address VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
     message TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
