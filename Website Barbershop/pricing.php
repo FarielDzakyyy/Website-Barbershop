@@ -112,7 +112,7 @@ if (!isset($_SESSION['username'])) {
                                    </li>
 
                                    <li>
-                                        <a href="#" class="social-link">
+                                        <a href="contact.php" class="social-link">
                                              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
                                         </a>
                                    </li>
@@ -305,10 +305,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Hair Cutting & Fitting</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Pemotongan Rambut 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="89">$89</data>
+                                             <data class="card-price" value="89">30K</data>
 
                                         </div>
                                    </li>
@@ -324,10 +324,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Shaving & Facial</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Cukur & Perawatan Wajah 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="45">$45</data>
+                                             <data class="card-price" value="45">$35K</data>
 
                                         </div>
                                    </li>
@@ -343,10 +343,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Hair Color & Wash</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Semir & Cuci Rambut 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="35">$35</data>
+                                             <data class="card-price" value="35">35K</data>
 
                                         </div>
                                    </li>
@@ -362,10 +362,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Body Massage</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Pijat Tubuh 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="56">$56</data>
+                                             <data class="card-price" value="56">50K</data>
 
                                         </div>
                                    </li>
@@ -381,10 +381,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Beauty & Spa</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Kecantikan & Spa 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="27">$27</data>
+                                             <data class="card-price" value="27">25K</data>
 
                                         </div>
                                    </li>
@@ -400,10 +400,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Facial & Face Wash</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Cuci Wajah & Wajah 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="63">$63</data>
+                                             <data class="card-price" value="63">20K</data>
 
                                         </div>
                                    </li>
@@ -419,10 +419,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Backbone Massage</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Pijat Tulang Punggung 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="43">$43</data>
+                                             <data class="card-price" value="43">40K</data>
 
                                         </div>
                                    </li>
@@ -438,10 +438,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Meditation & Massage</h3>
 
-                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
+                                                  <p class="card-text">Meditasi & Pijat 25-30 Menit</p>
                                              </div>
 
-                                             <data class="card-price" value="74">$74</data>
+                                             <data class="card-price" value="74">45K</data>
 
                                         </div>
                                    </li>

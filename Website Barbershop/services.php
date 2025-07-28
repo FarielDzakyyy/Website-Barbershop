@@ -112,7 +112,7 @@ if (!isset($_SESSION['username'])) {
                                    </li>
 
                                    <li>
-                                        <a href="#" class="social-link">
+                                        <a href="contact.php" class="social-link">
                                              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
                                         </a>
                                    </li>
