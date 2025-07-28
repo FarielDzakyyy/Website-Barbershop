@@ -2,8 +2,8 @@
 
 session_start();
 if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
-  exit;
+     header("Location: login.php");
+     exit;
 }
 
 ?>
@@ -52,13 +52,11 @@ if (!isset($_SESSION['username'])) {
      <link rel="preload" as="image" href="./assets/images/hero-banner.jpg">
 
      <style>
-
-     .back-top-btn {
-     right: auto;
-     left: 20px;
-     bottom: 20px;
-     }
-
+          .back-top-btn {
+               right: auto;
+               left: 20px;
+               bottom: 20px;
+          }
      </style>
 
 </head>
@@ -114,7 +112,7 @@ if (!isset($_SESSION['username'])) {
                                    </li>
 
                                    <li>
-                                        <a href="contact.php" class="social-link">
+                                        <a href="#" class="social-link">
                                              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
                                         </a>
                                    </li>
@@ -307,10 +305,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Hair Cutting & Fitting</h3>
 
-                                                  <p class="card-text">Pemotongan Rambut 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="89">30K</data>
+                                             <data class="card-price" value="89">$89</data>
 
                                         </div>
                                    </li>
@@ -326,10 +324,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Shaving & Facial</h3>
 
-                                                  <p class="card-text">Cukur & Perawatan Wajah 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="45">35K</data>
+                                             <data class="card-price" value="45">$45</data>
 
                                         </div>
                                    </li>
@@ -345,10 +343,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Hair Color & Wash</h3>
 
-                                                  <p class="card-text">Semir & Cuci Rambut 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="35">55K</data>
+                                             <data class="card-price" value="35">$35</data>
 
                                         </div>
                                    </li>
@@ -364,10 +362,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Body Massage</h3>
 
-                                                  <p class="card-text">Pijat Tubuh 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="56">50K</data>
+                                             <data class="card-price" value="56">$56</data>
 
                                         </div>
                                    </li>
@@ -383,10 +381,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Beauty & Spa</h3>
 
-                                                  <p class="card-text">Kecantikan & Spa 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="27">25K</data>
+                                             <data class="card-price" value="27">$27</data>
 
                                         </div>
                                    </li>
@@ -402,10 +400,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Facial & Face Wash</h3>
 
-                                                  <p class="card-text">Cuci Wajah & Wajah 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="63">20K</data>
+                                             <data class="card-price" value="63">$63</data>
 
                                         </div>
                                    </li>
@@ -421,10 +419,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Backbone Massage</h3>
 
-                                                  <p class="card-text">Pijat Tulang Punggung 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="43">40K</data>
+                                             <data class="card-price" value="43">$43</data>
 
                                         </div>
                                    </li>
@@ -440,10 +438,10 @@ if (!isset($_SESSION['username'])) {
                                              <div class="wrapper">
                                                   <h3 class="h3 card-title">Meditation & Massage</h3>
 
-                                                  <p class="card-text">Meditasi & Pijat 25-30 Menit</p>
+                                                  <p class="card-text">Clean & simple 30-40 minutes</p>
                                              </div>
 
-                                             <data class="card-price" value="74">45K</data>
+                                             <data class="card-price" value="74">$74</data>
 
                                         </div>
                                    </li>
@@ -481,9 +479,38 @@ if (!isset($_SESSION['username'])) {
                <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
                <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-     <script>
-      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="Zpw1BAFcD--FIB0BTZ5gq";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-     </script>
+               <script>
+                    (function() {
+                         if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+                              window.chatbase = (...arguments) => {
+                                   if (!window.chatbase.q) {
+                                        window.chatbase.q = []
+                                   }
+                                   window.chatbase.q.push(arguments)
+                              };
+                              window.chatbase = new Proxy(window.chatbase, {
+                                   get(target, prop) {
+                                        if (prop === "q") {
+                                             return target.q
+                                        }
+                                        return (...args) => target(prop, ...args)
+                                   }
+                              })
+                         }
+                         const onLoad = function() {
+                              const script = document.createElement("script");
+                              script.src = "https://www.chatbase.co/embed.min.js";
+                              script.id = "Zpw1BAFcD--FIB0BTZ5gq";
+                              script.domain = "www.chatbase.co";
+                              document.body.appendChild(script)
+                         };
+                         if (document.readyState === "complete") {
+                              onLoad()
+                         } else {
+                              window.addEventListener("load", onLoad)
+                         }
+                    })();
+               </script>
 
 </body>
 

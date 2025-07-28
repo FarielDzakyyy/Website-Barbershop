@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
-  exit;
+     header("Location: login.php");
+     exit;
 }
 ?>
 
@@ -51,66 +51,84 @@ if (!isset($_SESSION['username'])) {
      <link rel="preload" as="image" href="./assets/images/hero-banner.jpg">
 
      <style>
+          .back-top-btn {
+               right: auto;
+               left: 20px;
+               bottom: 20px;
+          }
 
-     .back-top-btn {
-     right: auto;
-     left: 20px;
-     bottom: 20px;
-     }
+          /* Neumorphic Input Fields */
+          .input-field {
+               transition: all 0.2s ease;
+               transform: translateY(0);
+               box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
 
-     .form-btn {
-     position: relative;
-     overflow: hidden;
-     background-color: #000000; /* Hitam */
-     color: #ffffff; /* Putih */
-     border: none;
-     padding: 15px 30px;
-     border-radius: 5px;
-     font-weight: bold;
-     cursor: pointer;
-     transition: background-color 0.4s ease, color 0.4s ease;
-     display: inline-flex;
-     align-items: center;
-     gap: 10px;
-     }
+          .input-field:focus {
+               transform: translateY(-3px);
+               box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+               outline: none;
+          }
 
-     /* Efek kilatan emas */
-     .form-btn::before {
-     content: "";
-     position: absolute;
-     top: 0;
-     left: -75%;
-     width: 50%;
-     height: 100%;
-     background: linear-gradient(
-     120deg,
-     rgba(255, 215, 0, 0) 0%,
-     rgba(255, 215, 0, 0.6) 50%,
-     rgba(255, 215, 0, 0) 100%
-     );
-     transform: skewX(-25deg);
-     pointer-events: none;
-     }
+          /* Enhanced Select Input */
+          select.input-field {
+               appearance: none;
+               background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+               background-repeat: no-repeat;
+               background-position: right 15px center;
+               background-size: 12px;
+          }
 
-     /* Hover effect */
-     .form-btn:hover {
-     background-color: darkorchid; /* Ungu */
-     color: #FFD700; /* Teks emas saat hover */
-     }
+          /* Enhanced Button */
+          .form-btn {
+               background-color: #ffffff;
+               color: var(--indian-yellow);
+               border: 2px solid var(--indian-yellow);
+               font-family: var(--ff-oswald);
+               font-size: var(--fs-14);
+               font-weight: var(--fw-600);
+               text-transform: uppercase;
+               width: 100%;
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               gap: 10px;
+               padding: 15px;
+               border-radius: var(--radius-5);
+               position: relative;
+               overflow: hidden;
+               cursor: pointer;
+               transition: all 0.4s ease;
+               box-shadow: 0 4px 8px rgba(194, 161, 93, 0.2);
+          }
 
-     .form-btn:hover::before {
-     animation: goldShine 0.8s ease forwards;
-     }
+          .form-btn:active {
+               transform: translateY(2px);
+               box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+          }
 
-     @keyframes goldShine {
-     0% {
-     left: -75%;
-     }
-     100% {
-     left: 125%;
-     }
-     }
+          /* Efek timbul saat tombol hover */
+          .form-btn:hover {
+               transform: translateY(-2px);
+               box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+          }
 
+          .form-btn::before {
+               content: '';
+               position: absolute;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background: purple;
+               z-index: -1;
+               opacity: 0;
+               transition: opacity 0.3s ease;
+          }
+
+          .form-btn:hover::before {
+               opacity: 1;
+          }
      </style>
 
 </head>
@@ -285,7 +303,7 @@ if (!isset($_SESSION['username'])) {
 
                                    <form id="appointmentForm" action="appointments.php" method="POST" class="appoin-form">
 
-                                                                                <div class="input-wrapper">
+                                        <div class="input-wrapper">
                                              <input type="text" name="name" placeholder="Your Full Name" required
                                                   class="input-field">
 
@@ -316,7 +334,7 @@ if (!isset($_SESSION['username'])) {
 
                                         <textarea name="message" placeholder="Write Message" required
                                              class="input-field"></textarea>
-                                            
+
                                         <button type="submit" class="form-btn">
                                              <span class="span">Appointment Now</span>
                                              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -402,7 +420,36 @@ if (!isset($_SESSION['username'])) {
      <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
      <script>
-      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="Zpw1BAFcD--FIB0BTZ5gq";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+          (function() {
+               if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+                    window.chatbase = (...arguments) => {
+                         if (!window.chatbase.q) {
+                              window.chatbase.q = []
+                         }
+                         window.chatbase.q.push(arguments)
+                    };
+                    window.chatbase = new Proxy(window.chatbase, {
+                         get(target, prop) {
+                              if (prop === "q") {
+                                   return target.q
+                              }
+                              return (...args) => target(prop, ...args)
+                         }
+                    })
+               }
+               const onLoad = function() {
+                    const script = document.createElement("script");
+                    script.src = "https://www.chatbase.co/embed.min.js";
+                    script.id = "Zpw1BAFcD--FIB0BTZ5gq";
+                    script.domain = "www.chatbase.co";
+                    document.body.appendChild(script)
+               };
+               if (document.readyState === "complete") {
+                    onLoad()
+               } else {
+                    window.addEventListener("load", onLoad)
+               }
+          })();
      </script>
 
 </body>

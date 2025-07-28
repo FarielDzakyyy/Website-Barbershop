@@ -50,15 +50,13 @@ if (!isset($_SESSION['username'])) {
   -->
      <link rel="preload" as="image" href="./assets/images/hero-banner.jpg">
 
-    <style>
-
-    .back-top-btn {
-    right: auto;
-    left: 20px;
-    bottom: 20px;
-    }
-    
-    </style>
+     <style>
+          .back-top-btn {
+               right: auto;
+               left: 20px;
+               bottom: 20px;
+          }
+     </style>
 
 </head>
 
@@ -821,9 +819,38 @@ if (!isset($_SESSION['username'])) {
                <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
                <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-     <script>
-      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="Zpw1BAFcD--FIB0BTZ5gq";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-     </script>
+               <script>
+                    (function() {
+                         if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+                              window.chatbase = (...arguments) => {
+                                   if (!window.chatbase.q) {
+                                        window.chatbase.q = []
+                                   }
+                                   window.chatbase.q.push(arguments)
+                              };
+                              window.chatbase = new Proxy(window.chatbase, {
+                                   get(target, prop) {
+                                        if (prop === "q") {
+                                             return target.q
+                                        }
+                                        return (...args) => target(prop, ...args)
+                                   }
+                              })
+                         }
+                         const onLoad = function() {
+                              const script = document.createElement("script");
+                              script.src = "https://www.chatbase.co/embed.min.js";
+                              script.id = "Zpw1BAFcD--FIB0BTZ5gq";
+                              script.domain = "www.chatbase.co";
+                              document.body.appendChild(script)
+                         };
+                         if (document.readyState === "complete") {
+                              onLoad()
+                         } else {
+                              window.addEventListener("load", onLoad)
+                         }
+                    })();
+               </script>
 
 </body>
 

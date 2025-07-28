@@ -13,6 +13,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const date = document.getElementById("dateInput");
   const time = document.getElementById("timeInput");
 
+  document.querySelectorAll('.input-field').forEach(input => {
+    input.addEventListener('focus', () => {
+      input.style.transform = 'translateY(-4px)';
+      input.style.boxShadow = '0 8px 15px rgba(0,0,0,0.1)';
+    });
+
+    input.addEventListener('blur', () => {
+      input.style.transform = 'translateY(0)';
+      input.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
+    });
+  });
+
   if (!form || !submitBtn || !name || !email || !phone || !service || !date || !time) return;
 
   const resetBorder = (element) => element.style.borderColor = "";
@@ -65,57 +77,90 @@ document.addEventListener("DOMContentLoaded", function () {
       method: "POST",
       body: formData
     })
-    .then(res => res.text())
-    .then(res => {
-      Swal.close();
+      .then(res => res.text())
+      .then(res => {
+        Swal.close();
 
-      if (res.includes("Appointment berhasil")) {
-        Swal.fire({
-          icon: "success",
-          title: "Sukses!",
-          text: "Appointment berhasil dibuat.",
-          confirmButtonColor: "#28a745"
-        }).then(() => window.location.href = "booking.php");
+        if (res.includes("Appointment berhasil")) {
+          Swal.fire({
+            icon: "success",
+            title: "Sukses!",
+            text: "Appointment berhasil dibuat.",
+            confirmButtonColor: "#28a745"
+          }).then(() => window.location.href = "booking.php");
 
-      } else if (res.includes("Jadwal Tidak Tersedia")) {
-        const htmlMsg = res.split("html: '")[1]?.split("',")[0] || "Slot waktu sudah penuh.";
-        Swal.fire({
-          icon: "warning",
-          title: "Jadwal Tidak Tersedia",
-          html: htmlMsg,
-          confirmButtonColor: "#ffc800"
-        });
+        } else if (res.includes("Jadwal Tidak Tersedia")) {
+          const htmlMsg = res.split("html: '")[1]?.split("',")[0] || "Slot waktu sudah penuh.";
+          Swal.fire({
+            icon: "warning",
+            title: "Jadwal Tidak Tersedia",
+            html: htmlMsg,
+            confirmButtonColor: "#ffc800"
+          });
 
-      } else if (res.includes("Form tidak lengkap")) {
+        } else if (res.includes("Form tidak lengkap")) {
+          Swal.fire({
+            icon: "error",
+            title: "Form tidak lengkap!",
+            text: "Semua field wajib diisi.",
+            confirmButtonColor: "#ffc800"
+          });
+
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Gagal",
+            text: "Terjadi kesalahan. Silakan coba lagi.",
+            confirmButtonColor: "#dc3545"
+          });
+        }
+      })
+      .catch(() => {
+        Swal.close();
         Swal.fire({
           icon: "error",
-          title: "Form tidak lengkap!",
-          text: "Semua field wajib diisi.",
-          confirmButtonColor: "#ffc800"
-        });
-
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Gagal",
-          text: "Terjadi kesalahan. Silakan coba lagi.",
+          title: "Error",
+          text: "Gagal terhubung ke server.",
           confirmButtonColor: "#dc3545"
         });
-      }
-    })
-    .catch(() => {
-      Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Gagal terhubung ke server.",
-        confirmButtonColor: "#dc3545"
       });
-    });
   });
 
   // Reset border saat input
   document.querySelectorAll(".input-field").forEach(input => {
+
+    document.querySelectorAll('.input-field').forEach(input => {
+      input.addEventListener('focus', () => {
+        input.style.transform = 'scale(1.02)';
+        input.style.zIndex = '10';
+      });
+
+      input.addEventListener('blur', () => {
+        input.style.transform = 'scale(1)';
+        input.style.zIndex = '1';
+      });
+    });
+
+    // Efek hover untuk tombol
+    const formBtn = document.querySelector('.form-btn');
+    if (formBtn) {
+      formBtn.addEventListener('mouseenter', () => {
+        formBtn.style.transform = 'translateY(-3px)';
+      });
+
+      formBtn.addEventListener('mouseleave', () => {
+        formBtn.style.transform = 'translateY(0)';
+      });
+
+      formBtn.addEventListener('mousedown', () => {
+        formBtn.style.transform = 'translateY(1px)';
+      });
+
+      formBtn.addEventListener('mouseup', () => {
+        formBtn.style.transform = 'translateY(-3px)';
+      });
+    }
+
     input.addEventListener("input", () => resetBorder(input));
   });
 
